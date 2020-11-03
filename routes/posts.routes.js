@@ -1,12 +1,13 @@
 const express = require('express');
+const auth = require('../_helper/authJwt');
 const router = express.Router();
 
 const postController = require('../controller/posts.controller')
 
-router.post("/", postController.create);
+router.post("/", auth, postController.create);
 router.get("/", postController.findAll);
 router.get("/:id", postController.findOne);
-router.put("/:id", postController.updateOne);
-router.delete("/:id", postController.deleteOne)
+router.put("/:id", auth, postController.updateOne);
+router.delete("/:id", auth, postController.deleteOne);
 
 module.exports = router;

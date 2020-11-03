@@ -2,35 +2,46 @@ const Post = require('../models/post.model');
 
 // TODO remove error messages from http response
 
-exports.create = (req, res) => {
-    if (!req.body.author && !req.body.title) {
+module.exports = {
+    create,
+    findAll,
+    findOne,
+    updateOne,
+    deleteOne
+}
+
+function create(req, res) {
+    if (!req.body.title) {
         res.status(400).send({error: true, message: "Body can not be empty!"})
+        return;
     }
 
     const post = new Post({
-        author: req.body.author,
+        author: req.user.id,
         title: req.body.title,
         description: req.body.description,
         score: 0,
-        public: req.body.public ? req.body.public: true
+        public: req.body.public ? req.body.public : true
     });
+
+    console.log(post);
 
     post.save(post).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({error: true, message: `Error creating new post! ${err}`});
     });
-};
+}
 
-exports.findAll = (req, res) => {
+function findAll(req, res) {
     Post.find({}).then(data => {
         res.status(200).send(data);
     }).catch(err => {
         res.status(500).send({error: true, message: `Error getting all posts! ${err}`});
     });
-};
+}
 
-exports.findOne = (req, res) => {
+function findOne(req, res) {
     const id = req.params.id;
     Post.findById(id).then(data => {
         if (!data) {
@@ -41,35 +52,52 @@ exports.findOne = (req, res) => {
     }).catch(err => {
         res.status(500).send({error: true, message: `Error getting post with id ${id}! ${err}`});
     });
-};
+}
 
-exports.updateOne = (req, res) => {
-    const id = req.params.id;
+async function updateOne(req, res) {
+    const userId = req.user.id;
+    const postId = req.params.id;
 
     if (!req.body.author && !req.body.title) {
         res.status(400).send({error: true, message: "Body can not be empty!"})
     }
 
-    Post.findByIdAndUpdate(id, req.body, {new: true}).then(data => {
+    const postToEdit = await Post.findById(postId);
+
+    if (postToEdit.author.toString() !== userId.toString()) {
+        res.status(401).send({error: true, message: "Only the author can update this post!"});
+        return;
+    }
+
+    Post.findByIdAndUpdate(postId, req.body, {new: true}).then(data => {
         if (!data) {
-            res.status(404).send({error: true, message: `Error updating post with id ${id}! Post not found!`})
+            res.status(404).send({error: true, message: `Error updating post with id ${postId}! Post not found!`})
         } else {
             res.status(200).send(data);
         }
     }).catch(err => {
-        res.status(500).send({error: true, message: `Error updating post with id ${id}! ${err}`});
+        res.status(500).send({error: true, message: `Error updating post with id ${postId}! ${err}`});
     });
-};
+}
 
-exports.deleteOne = (req, res) => {
-    const id = req.params.id;
-    Post.findByIdAndDelete(id).then(data => {
+async function deleteOne(req, res) {
+    const userId = req.user.id;
+    const postId = req.params.id;
+
+    const postToEdit = await Post.findById(postId);
+
+    if (postToEdit.author.toString() !== userId.toString()) {
+        res.status(401).send({error: true, message: "Only the author can delete this post!"});
+        return;
+    }
+
+    Post.findByIdAndDelete(postId).then(data => {
         if (!data) {
-            res.status(404).send({error: true, message: `Error deleting post with id ${id}! Post not found!`})
+            res.status(404).send({error: true, message: `Error deleting post with id ${postId}! Post not found!`})
         } else {
             res.status(204).send({});
         }
     }).catch(err => {
-        res.status(500).send({error: true, message: `Error deleting post with id ${id}! ${err}`});
+        res.status(500).send({error: true, message: `Error deleting post with id ${postId}! ${err}`});
     });
-};
+}

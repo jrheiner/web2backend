@@ -16,6 +16,4 @@ const UserSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// TODO Add default user student:dhbw for testing
-
 module.exports = mongoose.model('User', UserSchema);

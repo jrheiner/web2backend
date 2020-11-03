@@ -65,10 +65,6 @@ async function login(req, res) {
 }
 
  function findSelf(req, res) {
-    if (!req.user.id) {
-        res.status(401).send({error: true, message: `User not logged in!`})
-        return;
-    }
     const id = req.user.id;
     User.findById(id).then(data => {
         if (!data) {
@@ -82,8 +78,6 @@ async function login(req, res) {
 }
 
 function updateSelf(req, res) {
-    if (!req.user.id) return res.sendStatus(401);
-
     const id = req.user.id;
 
     if (!req.body.username && !req.body.password) {
@@ -102,8 +96,6 @@ function updateSelf(req, res) {
 }
 
 function deleteSelf(req, res) {
-    if (!req.user.id) return res.sendStatus(401);
-
     const id = req.user.id;
 
     User.findByIdAndDelete(id).then(data => {

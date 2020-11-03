@@ -23,6 +23,13 @@ app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
 app.use('/api/user', userRouter);
 
+// TODO implement general error handling
+app.use(function (err, req, res, next) {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).send({error: true, message: `User not logged in!`})
+    }
+});
+
 const mongooseOptions = {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false};
 mongoose.connect(config.mongoDB, mongooseOptions)
     .then(() => {

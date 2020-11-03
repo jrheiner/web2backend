@@ -2,9 +2,8 @@ const mongoose= require('mongoose')
 
 const PostSchema = new mongoose.Schema({
     author: {
-        type: String,
-        minlength: 2,
-        maxlength: 16,
+        type: mongoose.ObjectId,
+        ref: 'User',
         required: true
     },
     title: {
