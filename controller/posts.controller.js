@@ -34,7 +34,7 @@ exports.findOne = (req, res) => {
     const id = req.params.id;
     Post.findById(id).then(data => {
         if (!data) {
-            res.status(404).send({error: true, message: `Post with id ${id} not found`})
+            res.status(404).send({error: true, message: `Post with id ${id} not found!`})
         } else {
             res.status(200).send(data);
         }
