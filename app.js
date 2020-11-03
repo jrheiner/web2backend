@@ -8,6 +8,7 @@ const mongoDB = 'mongodb://localhost:27017/backend'
 
 const indexRouter = require('./routes/index');
 const postRouter = require('./routes/posts.routes')
+const commentRouter = require('./routes/comments.routes')
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/comments', commentRouter);
 
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
     .then(() => {

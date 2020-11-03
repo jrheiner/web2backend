@@ -59,7 +59,6 @@ exports.updateOne = (req, res) => {
     }).catch(err => {
         res.status(500).send({error: true, message: `Error updating post with id ${id}! ${err}`});
     });
-
 };
 
 exports.deleteOne = (req, res) => {
