@@ -2,6 +2,8 @@ const User = require('../models/user.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
+const postController = require('./posts.controller')
+
 // TODO remove error messages from http response
 
 module.exports = {
@@ -102,7 +104,9 @@ function deleteSelf (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `Error deleting user with id ${id}! User not found!` })
     } else {
-      res.status(204).send({})
+      postController.deleteByUser(id).then(() => {
+        res.status(204).send({})
+      })
     }
   }).catch(err => {
     res.status(500).send({ error: true, message: `Error deleting user with id ${id}! ${err}` })

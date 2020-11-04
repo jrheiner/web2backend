@@ -1,5 +1,7 @@
 const Post = require('../models/post.model')
 
+const commentController = require('./comments.controller')
+
 // TODO remove error messages from http response
 
 module.exports = {
@@ -7,7 +9,8 @@ module.exports = {
   findAll,
   findOne,
   updateOne,
-  deleteOne
+  deleteOne,
+  deleteByUser
 }
 
 function create (req, res) {
@@ -23,8 +26,6 @@ function create (req, res) {
     score: 0,
     public: req.body.public ? req.body.public : true
   })
-
-  console.log(post)
 
   post.save(post).then(data => {
     res.status(200).send(data)
@@ -95,9 +96,23 @@ async function deleteOne (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `Error deleting post with id ${postId}! Post not found!` })
     } else {
-      res.status(204).send({})
+      commentController.deleteByPost(postId).then(() => {
+        res.status(204).send({})
+      })
     }
   }).catch(err => {
     res.status(500).send({ error: true, message: `Error deleting post with id ${postId}! ${err}` })
+  })
+}
+
+// TODO error handling and response for mass deleting
+async function deleteByUser (userId) {
+  Post.deleteMany({ author: userId }).then(data => {
+    commentController.deleteByUser(userId).then(() => {
+      console.log('delete comments: ' + data)
+    })
+    console.log('delete posts: ' + data)
+  }).catch(err => {
+    console.log(err)
   })
 }

@@ -8,7 +8,9 @@ module.exports = {
   findAll,
   findOne,
   updateOne,
-  deleteOne
+  deleteOne,
+  deleteByPost,
+  deleteByUser
 }
 
 function create (req, res) {
@@ -98,5 +100,22 @@ async function deleteOne (req, res) {
     }
   }).catch(err => {
     res.status(500).send({ error: true, message: `Error deleting comment with id ${commentId}! ${err}` })
+  })
+}
+
+// TODO error handling and response for mass deleting
+async function deleteByPost (postId) {
+  Comment.deleteMany({ parent: postId }).then(data => {
+    console.log(data)
+  }).catch(err => {
+    console.log(err)
+  })
+}
+
+async function deleteByUser (userId) {
+  Comment.deleteMany({ author: userId }).then(data => {
+    console.log(data)
+  }).catch(err => {
+    console.log(err)
   })
 }
