@@ -2,10 +2,9 @@ const User = require('../models/user.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const v = require('../_helper/reqValidation')
-
+const config = require('../config/config.json')
+const errorMessages = require('../_helper/errorMessages')
 const postController = require('./posts.controller')
-
-// TODO remove error messages from http response
 
 module.exports = {
   register,
@@ -20,41 +19,35 @@ async function register (req, res) {
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
-      code: 4000,
-      message: 'Invalid JSON request body!',
+      message: errorMessages.invalidJson,
       stack: reqValidity.errors[0].stack
     })
     return
   }
-
   if (await User.findOne({ username: req.body.username })) {
     res.status(400).send({ error: true, message: 'Username already exists!' })
     return
   }
-
   const hash = bcrypt.hashSync(req.body.password, 10)
-
   const user = new User({
     username: req.body.username,
     hash: hash,
     score: 0
   })
-
   user.save(user).then(data => {
     res.status(200).send(data)
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error creating new user! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: 'Error creating new user!' })
   })
 }
 
-// TODO JWT SIGNING CONFIG ETC...
 async function login (req, res) {
   const reqValidity = v.validateLoginReq(req.body)
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
-      code: 4000,
-      message: 'Invalid JSON request body!',
+      message: errorMessages.invalidJson,
       stack: reqValidity.errors[0].stack
     })
     return
@@ -65,11 +58,11 @@ async function login (req, res) {
     const token = jwt.sign({
       id: user._id
     },
-    'jwt-dev',
+    config.jwt,
     {
-      expiresIn: '1d',
-      audience: 'localhost',
-      issuer: 'backend-dev'
+      expiresIn: config.jwt_expiresIn,
+      audience: config.jwt_audience,
+      issuer: config.jwt_issuer
     })
     const response = {
       ...user.toJSON(),
@@ -77,7 +70,10 @@ async function login (req, res) {
     }
     res.status(200).json(response)
   } else {
-    res.status(400).send({ error: true, message: 'Wrong password or username!' })
+    res.status(400).send({
+      error: true,
+      message: errorMessages.invalidLogin
+    })
   }
 }
 
@@ -90,28 +86,22 @@ function findSelf (req, res) {
       res.status(200).send(data)
     }
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error getting user with id ${id}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error getting user with id ${id}!` })
   })
 }
 
 function updateSelf (req, res) {
-  const reqValidity = v.validateLoginReq(req.body)
+  const reqValidity = v.validateUpdateUserReq(req.body)
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
-      code: 4000,
-      message: 'Invalid JSON request body!',
+      message: errorMessages.invalidJson,
       stack: reqValidity.errors[0].stack
     })
     return
   }
-
   const id = req.user.id
-
-  if (!req.body.username && !req.body.password) {
-    res.status(400).send({ error: true, message: 'Body can not be empty!' })
-  }
-
   User.findByIdAndUpdate(id, req.body, { new: true }).then(data => {
     if (!data) {
       res.status(404).send({ error: true, message: `Error updating user with id ${id}! User not found!` })
@@ -119,13 +109,13 @@ function updateSelf (req, res) {
       res.status(200).send(data)
     }
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error updating user with id ${id}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error updating user with id ${id}!` })
   })
 }
 
 function deleteSelf (req, res) {
   const id = req.user.id
-
   User.findByIdAndDelete(id).then(data => {
     if (!data) {
       res.status(404).send({ error: true, message: `Error deleting user with id ${id}! User not found!` })
@@ -135,6 +125,7 @@ function deleteSelf (req, res) {
       })
     }
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error deleting user with id ${id}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error deleting user with id ${id}!` })
   })
 }

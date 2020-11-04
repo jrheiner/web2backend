@@ -1,4 +1,7 @@
 {
   "mongoDB": "mongodb://localhost:27017/backend",
-  "jwt": "jwt-dev"
+  "jwt": "jwt-dev",
+  "jwt_expiresIn": "1d",
+  "jwt_audience": "localhost",
+  "jwt_issuer": "backend-dev"
 }

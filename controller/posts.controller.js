@@ -1,9 +1,8 @@
-const Post = require('../models/post.model')
-
-const commentController = require('./comments.controller')
 const v = require('../_helper/reqValidation')
-
-// TODO remove error messages from http response
+const errorMessages = require('../_helper/errorMessages')
+const commentController = require('./comments.controller')
+const Post = require('../models/post.model')
+const mongoose = require('mongoose')
 
 module.exports = {
   create,
@@ -19,13 +18,11 @@ function create (req, res) {
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
-      code: 4000,
-      message: 'Invalid JSON request body!',
+      message: errorMessages.invalidJson,
       stack: reqValidity.errors[0].stack
     })
     return
   }
-
   const post = new Post({
     author: req.user.id,
     title: req.body.title,
@@ -33,11 +30,11 @@ function create (req, res) {
     score: 0,
     public: req.body.public ? req.body.public : true
   })
-
   post.save(post).then(data => {
     res.status(200).send(data)
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error creating new post! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: 'Error creating new post!' })
   })
 }
 
@@ -45,7 +42,8 @@ function findAll (req, res) {
   Post.find({}).then(data => {
     res.status(200).send(data)
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error getting all posts! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: 'Error getting all posts!' })
   })
 }
 
@@ -58,8 +56,22 @@ function findOne (req, res) {
       res.status(200).send(data)
     }
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error getting post with id ${id}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error getting post with id ${id}!` })
   })
+}
+
+async function checkPrivileges (userId, postId, res) {
+  if (mongoose.isValidObjectId(postId)) {
+    const postToEdit = await Post.findById(postId)
+    if (!postToEdit) {
+      res.status(404).send({ error: true, message: `Post with id ${postId} not found!` })
+    } else if (postToEdit.author.toString() !== userId.toString()) {
+      res.status(401).send({ error: true, message: errorMessages.invalidPrivileges })
+    }
+  } else {
+    res.status(404).send({ error: true, message: `${postId} is an invalid post id!` })
+  }
 }
 
 async function updateOne (req, res) {
@@ -67,49 +79,34 @@ async function updateOne (req, res) {
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
-      code: 4000,
-      message: 'Invalid JSON request body!',
+      message: errorMessages.invalidJson,
       stack: reqValidity.errors[0].stack
     })
     return
   }
-
   const userId = req.user.id
   const postId = req.params.id
-
-  if (!req.body.author && !req.body.title) {
-    res.status(400).send({ error: true, message: 'Body can not be empty!' })
-  }
-
-  const postToEdit = await Post.findById(postId)
-
-  if (postToEdit.author.toString() !== userId.toString()) {
-    res.status(401).send({ error: true, message: 'Only the author can update this post!' })
+  if (!await checkPrivileges(userId, postId, res)) {
     return
   }
-
   Post.findByIdAndUpdate(postId, req.body, { new: true }).then(data => {
     if (!data) {
-      res.status(404).send({ error: true, message: `Error updating post with id ${postId}! Post not found!` })
+      res.status(404).send({ error: true, message: `Error updating post with id ${postId}!` })
     } else {
       res.status(200).send(data)
     }
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error updating post with id ${postId}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error updating post with id ${postId}!` })
   })
 }
 
 async function deleteOne (req, res) {
   const userId = req.user.id
   const postId = req.params.id
-
-  const postToEdit = await Post.findById(postId)
-
-  if (postToEdit.author.toString() !== userId.toString()) {
-    res.status(401).send({ error: true, message: 'Only the author can delete this post!' })
+  if (!await checkPrivileges(userId, postId, res)) {
     return
   }
-
   Post.findByIdAndDelete(postId).then(data => {
     if (!data) {
       res.status(404).send({ error: true, message: `Error deleting post with id ${postId}! Post not found!` })
@@ -119,18 +116,14 @@ async function deleteOne (req, res) {
       })
     }
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error deleting post with id ${postId}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error deleting post with id ${postId}!` })
   })
 }
 
 // TODO error handling and response for mass deleting
 async function deleteByUser (userId) {
-  Post.deleteMany({ author: userId }).then(data => {
-    commentController.deleteByUser(userId).then(() => {
-      console.log('delete comments: ' + data)
-    })
-    console.log('delete posts: ' + data)
-  }).catch(err => {
-    console.log(err)
-  })
+  Post.deleteMany({ author: userId }).then(() => {
+    commentController.deleteByUser(userId).then(() => {})
+  }).catch(err => { console.log(err) })
 }

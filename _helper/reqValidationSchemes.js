@@ -1,24 +1,28 @@
 const Validator = require('jsonschema').Validator
 const mongoose = require('mongoose')
 
-// TODO nested schema for username and password
 // https://json-schema.org/draft/2019-09/json-schema-validation.html
+
+const usernameProperties = {
+  type: 'string',
+  minLength: 2,
+  maxLength: 16
+}
+
+const passwordProperties = {
+  type: 'string',
+  minLength: 5,
+  maxLength: 32
+
+}
 
 const RegisterReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
+  id: 'RegisterReqSchema',
   type: 'object',
   properties: {
-    username: {
-      type: 'string',
-      minLength: 2,
-      maxLength: 16
-
-    },
-    password: {
-      type: 'string',
-      minLength: 5,
-      maxLength: 32
-    }
+    username: usernameProperties,
+    password: passwordProperties
   },
   required: [
     'username',
@@ -30,17 +34,8 @@ const LoginReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   type: 'object',
   properties: {
-    username: {
-      type: 'string',
-      minLength: 2,
-      maxLength: 16
-
-    },
-    password: {
-      type: 'string',
-      minLength: 5,
-      maxLength: 32
-    }
+    username: usernameProperties,
+    password: passwordProperties
   },
   required: [
     'username',
@@ -52,17 +47,8 @@ const UpdateUserReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   type: 'object',
   properties: {
-    username: {
-      type: 'string',
-      minLength: 2,
-      maxLength: 16
-
-    },
-    password: {
-      type: 'string',
-      minLength: 5,
-      maxLength: 32
-    }
+    username: usernameProperties,
+    password: passwordProperties
   },
   required: [
     'username',

@@ -1,8 +1,7 @@
 const Comment = require('../models/comment.model')
 const v = require('../_helper/reqValidation')
-
-// TODO remove error messages from http response
-// TODO deleting or updating post/comment/user that does not exit
+const errorMessages = require('../_helper/errorMessages')
+const mongoose = require('mongoose')
 
 module.exports = {
   create,
@@ -19,24 +18,22 @@ function create (req, res) {
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
-      code: 4000,
-      message: 'Invalid JSON request body!',
+      message: errorMessages.invalidJson,
       stack: reqValidity.errors[0].stack
     })
     return
   }
-
   const comment = new Comment({
     parent: req.body.parent,
     author: req.user.id,
     description: req.body.description,
     score: 0
   })
-
   comment.save(comment).then(data => {
     res.status(200).send(data)
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error creating new comment! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: 'Error creating new comment!' })
   })
 }
 
@@ -45,7 +42,8 @@ function findAll (req, res) {
   Comment.find({ parent: id }).then(data => {
     res.status(200).send(data)
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error getting comment for post ${id}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error getting comment for post ${id}!` })
   })
 }
 
@@ -58,8 +56,22 @@ function findOne (req, res) {
       res.status(200).send(data)
     }
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error getting comment with id ${id}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error getting comment with id ${id}!` })
   })
+}
+
+async function checkPrivileges (userId, commentId, res) {
+  if (mongoose.isValidObjectId(commentId)) {
+    const commentToEdit = await Comment.findById(commentId)
+    if (!commentToEdit) {
+      res.status(404).send({ error: true, message: `Comment with id ${commentId} not found!` })
+    } else if (commentToEdit.author.toString() !== userId.toString()) {
+      res.status(401).send({ error: true, message: errorMessages.invalidPrivileges })
+    }
+  } else {
+    res.status(404).send({ error: true, message: `${commentId} is an invalid comment id!` })
+  }
 }
 
 async function updateOne (req, res) {
@@ -67,28 +79,16 @@ async function updateOne (req, res) {
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
-      code: 4000,
-      message: 'Invalid JSON request body!',
+      message: errorMessages.invalidJson,
       stack: reqValidity.errors[0].stack
     })
     return
   }
-
   const userId = req.user.id
   const commentId = req.params.id
-
-  if (!req.body.parent && !req.body.author && !req.body.description) {
-    res.status(400).send({ error: true, message: 'Body can not be empty!' })
+  if (!await checkPrivileges(userId, commentId, res)) {
     return
   }
-
-  const commentToEdit = await Comment.findById(commentId)
-
-  if (commentToEdit.author.toString() !== userId.toString()) {
-    res.status(401).send({ error: true, message: 'Only the author can update this comment!' })
-    return
-  }
-
   Comment.findByIdAndUpdate(commentId, req.body, { new: true }).then(data => {
     if (!data) {
       res.status(404).send({ error: true, message: `Error updating comment with id ${commentId}! Comment not found!` })
@@ -96,21 +96,17 @@ async function updateOne (req, res) {
       res.status(200).send(data)
     }
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error updating comment with id ${commentId}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error updating comment with id ${commentId}!` })
   })
 }
 
 async function deleteOne (req, res) {
   const userId = req.user.id
   const commentId = req.params.id
-
-  const commentToEdit = await Comment.findById(commentId)
-
-  if (!commentToEdit && commentToEdit.author.toString() !== userId.toString()) {
-    res.status(401).send({ error: true, message: 'Only the author can update this comment!' })
+  if (!await checkPrivileges(userId, commentId, res)) {
     return
   }
-
   Comment.findByIdAndDelete(commentId).then(data => {
     if (!data) {
       res.status(404).send({ error: true, message: `Error deleting comment with id ${commentId}! Comment not found!` })
@@ -118,7 +114,8 @@ async function deleteOne (req, res) {
       res.status(204).send({})
     }
   }).catch(err => {
-    res.status(500).send({ error: true, message: `Error deleting comment with id ${commentId}! ${err}` })
+    console.log(err)
+    res.status(500).send({ error: true, message: `Error deleting comment with id ${commentId}!` })
   })
 }
 
