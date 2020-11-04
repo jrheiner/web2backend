@@ -1,6 +1,7 @@
 const Post = require('../models/post.model')
 
 const commentController = require('./comments.controller')
+const v = require('../_helper/reqValidation')
 
 // TODO remove error messages from http response
 
@@ -14,8 +15,14 @@ module.exports = {
 }
 
 function create (req, res) {
-  if (!req.body.title) {
-    res.status(400).send({ error: true, message: 'Body can not be empty!' })
+  const reqValidity = v.validatePostReq(req.body)
+  if (!reqValidity.valid) {
+    res.status(400).send({
+      error: true,
+      code: 4000,
+      message: 'Invalid JSON request body!',
+      stack: reqValidity.errors[0].stack
+    })
     return
   }
 
@@ -56,6 +63,17 @@ function findOne (req, res) {
 }
 
 async function updateOne (req, res) {
+  const reqValidity = v.validatePostReq(req.body)
+  if (!reqValidity.valid) {
+    res.status(400).send({
+      error: true,
+      code: 4000,
+      message: 'Invalid JSON request body!',
+      stack: reqValidity.errors[0].stack
+    })
+    return
+  }
+
   const userId = req.user.id
   const postId = req.params.id
 

@@ -3,9 +3,30 @@ const ReqSchemes = require('./reqValidationSchemes')
 
 const v = new Validator()
 
-const registerReq = {
-  username: '123456789123123131234567',
-  password: '1245'
+module.exports = {
+  validateRegisterReq,
+  validateLoginReq,
+  validateUpdateUserReq,
+  validatePostReq,
+  validateCommentReq
 }
 
-console.log(v.validate(registerReq, ReqSchemes.RegisterReqSchema))
+function validateRegisterReq (registerReq) {
+  return v.validate(registerReq, ReqSchemes.RegisterReqSchema)
+}
+
+function validateLoginReq (registerReq) {
+  return v.validate(registerReq, ReqSchemes.LoginReqSchema)
+}
+
+function validateUpdateUserReq (registerReq) {
+  return v.validate(registerReq, ReqSchemes.UpdateUserReqSchema)
+}
+
+function validatePostReq (registerReq) {
+  return v.validate(registerReq, ReqSchemes.PostReqSchema)
+}
+
+function validateCommentReq (registerReq) {
+  return v.validate(registerReq, ReqSchemes.CommentReqSchema)
+}

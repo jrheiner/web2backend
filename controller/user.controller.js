@@ -1,6 +1,7 @@
 const User = require('../models/user.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const v = require('../_helper/reqValidation')
 
 const postController = require('./posts.controller')
 
@@ -14,11 +15,15 @@ module.exports = {
   deleteSelf
 }
 
-// TODO if  is sent i throws an error, only checks for empty field not non existing fields
-//  { "username": "student" }
 async function register (req, res) {
-  if (!req.body.username && !req.body.password) {
-    res.status(400).send({ error: true, message: 'Body can not be empty!' })
+  const reqValidity = v.validateRegisterReq(req.body)
+  if (!reqValidity.valid) {
+    res.status(400).send({
+      error: true,
+      code: 4000,
+      message: 'Invalid JSON request body!',
+      stack: reqValidity.errors[0].stack
+    })
     return
   }
 
@@ -43,8 +48,18 @@ async function register (req, res) {
 }
 
 // TODO JWT SIGNING CONFIG ETC...
-
 async function login (req, res) {
+  const reqValidity = v.validateLoginReq(req.body)
+  if (!reqValidity.valid) {
+    res.status(400).send({
+      error: true,
+      code: 4000,
+      message: 'Invalid JSON request body!',
+      stack: reqValidity.errors[0].stack
+    })
+    return
+  }
+
   const user = await User.findOne({ username: req.body.username })
   if (user && bcrypt.compareSync(req.body.password, user.hash)) {
     const token = jwt.sign({
@@ -80,6 +95,17 @@ function findSelf (req, res) {
 }
 
 function updateSelf (req, res) {
+  const reqValidity = v.validateLoginReq(req.body)
+  if (!reqValidity.valid) {
+    res.status(400).send({
+      error: true,
+      code: 4000,
+      message: 'Invalid JSON request body!',
+      stack: reqValidity.errors[0].stack
+    })
+    return
+  }
+
   const id = req.user.id
 
   if (!req.body.username && !req.body.password) {

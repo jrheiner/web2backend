@@ -1,4 +1,5 @@
 const Comment = require('../models/comment.model')
+const v = require('../_helper/reqValidation')
 
 // TODO remove error messages from http response
 // TODO deleting or updating post/comment/user that does not exit
@@ -14,8 +15,15 @@ module.exports = {
 }
 
 function create (req, res) {
-  if (!req.body.parent && !req.body.description) {
-    res.status(400).send({ error: true, message: 'Body can not be empty!' })
+  const reqValidity = v.validateCommentReq(req.body)
+  if (!reqValidity.valid) {
+    res.status(400).send({
+      error: true,
+      code: 4000,
+      message: 'Invalid JSON request body!',
+      stack: reqValidity.errors[0].stack
+    })
+    return
   }
 
   const comment = new Comment({
@@ -55,6 +63,17 @@ function findOne (req, res) {
 }
 
 async function updateOne (req, res) {
+  const reqValidity = v.validateCommentReq(req.body)
+  if (!reqValidity.valid) {
+    res.status(400).send({
+      error: true,
+      code: 4000,
+      message: 'Invalid JSON request body!',
+      stack: reqValidity.errors[0].stack
+    })
+    return
+  }
+
   const userId = req.user.id
   const commentId = req.params.id
 
