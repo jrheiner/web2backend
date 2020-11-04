@@ -8,7 +8,7 @@ const User = require('../models/user.model')
 const jwtAuth = jwt({
   secret: config.jwt,
   algorithms: ['HS256'],
-  isRevoked,
+  isRevoked: isRevoked,
   audience: 'localhost',
   issuer: 'backend-dev'
 })
