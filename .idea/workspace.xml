@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="22142bf9-6238-4fc9-b23e-bebc275145aa" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLinters/eslint.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLinters/jshint.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_helper/authJwt.js" beforeDir="false" afterPath="$PROJECT_DIR$/_helper/authJwt.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
@@ -11,7 +14,10 @@
       <change beforePath="$PROJECT_DIR$/models/comment.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/comment.model.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/post.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/post.model.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/user.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/comments.routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/comments.routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/posts.routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/posts.routes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/user.routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user.routes.js" afterDir="false" />
     </list>
@@ -30,6 +36,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
   <component name="ProjectId" id="1jmbOlUInoZWSgXSLvnM58FOcRg" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -41,10 +53,17 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="14.10.1" />
     <property name="javascript.nodejs.core.library.typings.version" value="14.10.1" />
+    <property name="js.linters.configure.manually.selectedeslint" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="C:\Users\Jonas\Desktop\3. Semester\Web Engineering 2\Project Directory\Working\BackEnd\node_modules\eslint" />
+    <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected="Node.js.bin\www">
@@ -73,7 +92,7 @@
       <option name="presentableId" value="Default" />
       <updated>1604412184559</updated>
       <workItem from="1604412185609" duration="7185000" />
-      <workItem from="1604419503370" duration="20740000" />
+      <workItem from="1604419503370" duration="22072000" />
     </task>
     <servers />
   </component>
@@ -81,30 +100,38 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="568" y="107" width="948" height="681" key="#ESLint" timestamp="1604479902103">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="568" y="107" width="948" height="681" key="#ESLint/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604479902103" />
+    <state x="535" y="144" key="#JSHint" timestamp="1604479187509">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="535" y="144" key="#JSHint/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604479187509" />
     <state x="706" y="366" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1604439043154">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="706" y="366" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604439043154" />
-    <state width="1897" height="281" key="GridCell.Tab.0.bottom" timestamp="1604441657545">
+    <state width="1897" height="281" key="GridCell.Tab.0.bottom" timestamp="1604442153674">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1897" height="281" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604441657545" />
-    <state width="1897" height="281" key="GridCell.Tab.0.center" timestamp="1604441657544">
+    <state width="1897" height="281" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604442153674" />
+    <state width="1897" height="281" key="GridCell.Tab.0.center" timestamp="1604442153674">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1897" height="281" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604441657544" />
-    <state width="1897" height="281" key="GridCell.Tab.0.left" timestamp="1604441657544">
+    <state width="1897" height="281" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604442153674" />
+    <state width="1897" height="281" key="GridCell.Tab.0.left" timestamp="1604442153674">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1897" height="281" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604441657544" />
-    <state width="1897" height="281" key="GridCell.Tab.0.right" timestamp="1604441657545">
+    <state width="1897" height="281" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604442153674" />
+    <state width="1897" height="281" key="GridCell.Tab.0.right" timestamp="1604442153674">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1897" height="281" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604441657545" />
-    <state x="460" y="164" key="SettingsEditor" timestamp="1604435900760">
+    <state width="1897" height="281" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604442153674" />
+    <state x="471" y="170" key="SettingsEditor" timestamp="1604479795955">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="460" y="164" key="SettingsEditor/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604435900760" />
+    <state x="471" y="170" key="SettingsEditor/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604479795955" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1604416177678">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

@@ -1,28 +1,27 @@
-const mongoose= require('mongoose')
+const mongoose = require('mongoose')
 
 const PostSchema = new mongoose.Schema({
-    author: {
-        type: mongoose.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    title: {
-        type: String,
-        maxlength: 150,
-        required: true
-    },
-    description: {
-        type: String,
-        maxlength: 2000
-    },
-    score: Number,
-    public: {
-        type: Boolean,
-        default: true
-    }
+  author: {
+    type: mongoose.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  title: {
+    type: String,
+    maxlength: 150,
+    required: true
+  },
+  description: {
+    type: String,
+    maxlength: 2000
+  },
+  score: Number,
+  public: {
+    type: Boolean,
+    default: true
+  }
 }, {
-    timestamps: true
-});
+  timestamps: true
+})
 
-
-module.exports = mongoose.model('Post', PostSchema);
+module.exports = mongoose.model('Post', PostSchema)
