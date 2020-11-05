@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 
-// TODO dont return hash when requesting user info
-
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
