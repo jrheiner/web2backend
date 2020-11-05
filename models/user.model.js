@@ -18,4 +18,8 @@ const UserSchema = new mongoose.Schema({
   timestamps: true
 })
 
+UserSchema.static('getUsernameById', function (userId) {
+  return this.findById(userId, 'username')
+})
+
 module.exports = mongoose.model('User', UserSchema)

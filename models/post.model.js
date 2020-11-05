@@ -24,4 +24,8 @@ const PostSchema = new mongoose.Schema({
   timestamps: true
 })
 
+PostSchema.static('findManyByUser', function (userId) {
+  return this.find({ author: userId })
+})
+
 module.exports = mongoose.model('Post', PostSchema)

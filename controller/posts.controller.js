@@ -1,5 +1,6 @@
 const v = require('../_helper/reqValidation')
 const errorMessages = require('../_helper/errorMessages')
+const buildResponse = require('../_helper/buildResponse')
 const commentController = require('./comments.controller')
 const Post = require('../models/post.model')
 const mongoose = require('mongoose')
@@ -40,7 +41,7 @@ function create (req, res) {
 
 function findAll (req, res) {
   Post.find({}).then(data => {
-    res.status(200).send(data)
+    buildResponse.buildPostResponseMultiple(data).then(data => { res.status(200).send(data) })
   }).catch(err => {
     console.log(err)
     res.status(500).send({ error: true, message: 'Error getting all posts!' })
@@ -53,7 +54,7 @@ function findOne (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `Post with id ${id} not found!` })
     } else {
-      res.status(200).send(data)
+      buildResponse.buildPostResponse(data).then(data => { res.status(200).send(data) })
     }
   }).catch(err => {
     console.log(err)
@@ -66,8 +67,12 @@ async function checkPrivileges (userId, postId, res) {
     const postToEdit = await Post.findById(postId)
     if (!postToEdit) {
       res.status(404).send({ error: true, message: `Post with id ${postId} not found!` })
-    } else if (postToEdit.author.toString() !== userId.toString()) {
+      return false
+    } else if (postToEdit.author.toString() === userId.toString()) {
+      return true
+    } else {
       res.status(401).send({ error: true, message: errorMessages.invalidPrivileges })
+      return false
     }
   } else {
     res.status(404).send({ error: true, message: `${postId} is an invalid post id!` })
@@ -93,7 +98,7 @@ async function updateOne (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `Error updating post with id ${postId}!` })
     } else {
-      res.status(200).send(data)
+      buildResponse.buildPostResponse(data).then(data => { res.status(200).send(data) })
     }
   }).catch(err => {
     console.log(err)
@@ -112,7 +117,7 @@ async function deleteOne (req, res) {
       res.status(404).send({ error: true, message: `Error deleting post with id ${postId}! Post not found!` })
     } else {
       commentController.deleteByPost(postId).then(() => {
-        res.status(204).send({})
+        res.sendStatus(204)
       })
     }
   }).catch(err => {

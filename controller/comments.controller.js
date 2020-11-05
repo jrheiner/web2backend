@@ -2,6 +2,7 @@ const Comment = require('../models/comment.model')
 const v = require('../_helper/reqValidation')
 const errorMessages = require('../_helper/errorMessages')
 const mongoose = require('mongoose')
+const buildResponse = require('../_helper/buildResponse')
 
 module.exports = {
   create,
@@ -10,7 +11,8 @@ module.exports = {
   updateOne,
   deleteOne,
   deleteByPost,
-  deleteByUser
+  deleteByUser,
+  findManyByUser
 }
 
 function create (req, res) {
@@ -39,12 +41,16 @@ function create (req, res) {
 
 function findAll (req, res) {
   const id = req.params.id
-  Comment.find({ parent: id }).then(data => {
-    res.status(200).send(data)
-  }).catch(err => {
-    console.log(err)
-    res.status(500).send({ error: true, message: `Error getting comment for post ${id}!` })
-  })
+  if (mongoose.isValidObjectId(id)) {
+    Comment.find({ parent: id }).then(data => {
+      buildResponse.buildCommentResponseMultiple(data).then(data => { res.status(200).send(data) })
+    }).catch(err => {
+      console.log(err)
+      res.status(500).send({ error: true, message: `Error getting comment for post ${id}!` })
+    })
+  } else {
+    res.status(404).send({ error: true, message: `${id} is an invalid post id!` })
+  }
 }
 
 function findOne (req, res) {
@@ -53,7 +59,7 @@ function findOne (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `Comment with id ${id} not found` })
     } else {
-      res.status(200).send(data)
+      buildResponse.buildCommentResponse(data).then(data => { res.status(200).send(data) })
     }
   }).catch(err => {
     console.log(err)
@@ -66,8 +72,12 @@ async function checkPrivileges (userId, commentId, res) {
     const commentToEdit = await Comment.findById(commentId)
     if (!commentToEdit) {
       res.status(404).send({ error: true, message: `Comment with id ${commentId} not found!` })
-    } else if (commentToEdit.author.toString() !== userId.toString()) {
+      return false
+    } else if (commentToEdit.author.toString() === userId.toString()) {
+      return true
+    } else {
       res.status(401).send({ error: true, message: errorMessages.invalidPrivileges })
+      return false
     }
   } else {
     res.status(404).send({ error: true, message: `${commentId} is an invalid comment id!` })
@@ -93,7 +103,7 @@ async function updateOne (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `Error updating comment with id ${commentId}! Comment not found!` })
     } else {
-      res.status(200).send(data)
+      buildResponse.buildCommentResponse(data).then(data => { res.status(200).send(data) })
     }
   }).catch(err => {
     console.log(err)
@@ -111,7 +121,7 @@ async function deleteOne (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `Error deleting comment with id ${commentId}! Comment not found!` })
     } else {
-      res.status(204).send({})
+      res.sendStatus(204)
     }
   }).catch(err => {
     console.log(err)
@@ -133,5 +143,14 @@ async function deleteByUser (userId) {
     console.log(data)
   }).catch(err => {
     console.log(err)
+  })
+}
+
+function findManyByUser (userId) {
+  Comment.find({ author: userId }).then(data => {
+    return data
+  }).catch(err => {
+    console.log(err)
+    return {}
   })
 }

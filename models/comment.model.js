@@ -21,4 +21,8 @@ const CommentSchema = new mongoose.Schema({
   timestamps: true
 })
 
+CommentSchema.static('findManyByUser', function (userId) {
+  return this.find({ author: userId })
+})
+
 module.exports = mongoose.model('Comment', CommentSchema)

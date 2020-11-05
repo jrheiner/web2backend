@@ -2,6 +2,7 @@ const User = require('../models/user.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const v = require('../_helper/reqValidation')
+const buildResponse = require('../_helper/buildResponse')
 const config = require('../config/config.json')
 const errorMessages = require('../_helper/errorMessages')
 const postController = require('./posts.controller')
@@ -83,7 +84,7 @@ function findSelf (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `User with id ${id} not found!` })
     } else {
-      res.status(200).send(data)
+      buildResponse.buildUserResponse(data).then(data => { res.status(200).send(data) })
     }
   }).catch(err => {
     console.log(err)
