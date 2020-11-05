@@ -28,4 +28,8 @@ PostSchema.static('findManyByUser', function (userId) {
   return this.find({ author: userId })
 })
 
+PostSchema.static('deleteByUser', function (userId) {
+  return this.deleteMany({ author: userId })
+})
+
 module.exports = mongoose.model('Post', PostSchema)

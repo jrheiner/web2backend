@@ -4,14 +4,14 @@ const buildResponse = require('../_helper/buildResponse')
 const commentController = require('./comments.controller')
 const Post = require('../models/post.model')
 const mongoose = require('mongoose')
+const chainDelete = require('../_helper/chainDelete')
 
 module.exports = {
   create,
   findAll,
   findOne,
   updateOne,
-  deleteOne,
-  deleteByUser
+  deleteOne
 }
 
 function create (req, res) {
@@ -116,7 +116,8 @@ async function deleteOne (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `Error deleting post with id ${postId}! Post not found!` })
     } else {
-      commentController.deleteByPost(postId).then(() => {
+      chainDelete.deletePostChildren(postId).then((data) => {
+        console.log(data)
         res.sendStatus(204)
       })
     }
@@ -124,11 +125,4 @@ async function deleteOne (req, res) {
     console.log(err)
     res.status(500).send({ error: true, message: `Error deleting post with id ${postId}!` })
   })
-}
-
-// TODO error handling and response for mass deleting
-async function deleteByUser (userId) {
-  Post.deleteMany({ author: userId }).then(() => {
-    commentController.deleteByUser(userId).then(() => {})
-  }).catch(err => { console.log(err) })
 }

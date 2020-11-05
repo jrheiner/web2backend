@@ -6,6 +6,7 @@ const buildResponse = require('../_helper/buildResponse')
 const config = require('../config/config.json')
 const errorMessages = require('../_helper/errorMessages')
 const postController = require('./posts.controller')
+const chainDelete = require('../_helper/chainDelete')
 
 module.exports = {
   register,
@@ -121,8 +122,9 @@ function deleteSelf (req, res) {
     if (!data) {
       res.status(404).send({ error: true, message: `Error deleting user with id ${id}! User not found!` })
     } else {
-      postController.deleteByUser(id).then(() => {
-        res.status(204).send({})
+      chainDelete.deleteUserChildren(id).then((data) => {
+        console.log(data)
+        res.sendStatus(204)
       })
     }
   }).catch(err => {
