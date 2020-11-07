@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="22142bf9-6238-4fc9-b23e-bebc275145aa" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/_helper/chainDelete.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/comments.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/comments.controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_helper/buildResponse.js" beforeDir="false" afterPath="$PROJECT_DIR$/_helper/buildResponse.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/posts.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/posts.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/user.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/user.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/comment.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/comment.model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/post.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/post.model.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +49,7 @@
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected="Node.js.bin\www">
@@ -82,7 +78,7 @@
       <option name="presentableId" value="Default" />
       <updated>1604412184559</updated>
       <workItem from="1604412185609" duration="7185000" />
-      <workItem from="1604419503370" duration="56317000" />
+      <workItem from="1604419503370" duration="64506000" />
     </task>
     <servers />
   </component>
@@ -114,30 +110,30 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="750" y="281" key="FileChooserDialogImpl/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604480683586" />
-    <state width="1875" height="218" key="GridCell.Tab.0.bottom" timestamp="1604616463684">
+    <state width="1875" height="218" key="GridCell.Tab.0.bottom" timestamp="1604743720234">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1875" height="228" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.1920.1040@-1920.0.1920.1040" timestamp="1604613221134" />
-    <state width="1875" height="218" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604616463684" />
-    <state width="1875" height="218" key="GridCell.Tab.0.center" timestamp="1604616463684">
+    <state width="1875" height="218" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604743720234" />
+    <state width="1875" height="218" key="GridCell.Tab.0.center" timestamp="1604743720234">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1875" height="228" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.1920.1040@-1920.0.1920.1040" timestamp="1604613221133" />
-    <state width="1875" height="218" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604616463684" />
-    <state width="1875" height="218" key="GridCell.Tab.0.left" timestamp="1604616463684">
+    <state width="1875" height="218" key="GridCell.Tab.0.center/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604743720234" />
+    <state width="1875" height="218" key="GridCell.Tab.0.left" timestamp="1604743720234">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1875" height="228" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.1920.1040@-1920.0.1920.1040" timestamp="1604613221133" />
-    <state width="1875" height="218" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604616463684" />
-    <state width="1875" height="218" key="GridCell.Tab.0.right" timestamp="1604616463684">
+    <state width="1875" height="218" key="GridCell.Tab.0.left/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604743720234" />
+    <state width="1875" height="218" key="GridCell.Tab.0.right" timestamp="1604743720234">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1875" height="228" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.1920.1040@-1920.0.1920.1040" timestamp="1604613221133" />
-    <state width="1875" height="218" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604616463684" />
-    <state x="-1514" y="96" width="1334" height="712" key="SettingsEditor" timestamp="1604486019698">
+    <state width="1875" height="218" key="GridCell.Tab.0.right/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604743720234" />
+    <state x="-1514" y="96" width="1334" height="712" key="SettingsEditor" timestamp="1604672075790">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="-1514" y="96" width="1334" height="712" key="SettingsEditor/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604486019698" />
+    <state x="-1514" y="96" width="1334" height="712" key="SettingsEditor/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1604672075790" />
     <state x="1038" y="104" width="623" height="831" key="find.popup" timestamp="1604617499526">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

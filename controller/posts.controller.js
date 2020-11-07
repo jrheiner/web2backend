@@ -1,7 +1,6 @@
 const v = require('../_helper/reqValidation')
 const errorMessages = require('../_helper/errorMessages')
 const buildResponse = require('../_helper/buildResponse')
-const commentController = require('./comments.controller')
 const Post = require('../models/post.model')
 const mongoose = require('mongoose')
 const chainDelete = require('../_helper/chainDelete')
@@ -49,6 +48,7 @@ function findAll (req, res) {
 }
 
 function findOne (req, res) {
+  // TODO CHECK FOR VALID ID
   const id = req.params.id
   Post.findById(id).then(data => {
     if (!data) {

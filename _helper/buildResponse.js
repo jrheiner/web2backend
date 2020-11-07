@@ -12,8 +12,10 @@ module.exports = {
   buildCommentResponseMultiple,
   buildUserResponse
 }
-
+// TODO Login response still includes hash + what about token
+// TODO Register response needs still , maybe include success state
 // TODO validation/schema of json before sending back?
+// TODO DONT ALLOW SPACE IN USERNAME -> CHANGE ALSO IN FRONTEND
 async function buildPostResponse (data, authorInfo = true) {
   const userId = data.author
   const author = (authorInfo ? await User.getUsernameById(userId) : undefined)
