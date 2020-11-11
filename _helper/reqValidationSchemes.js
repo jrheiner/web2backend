@@ -48,11 +48,15 @@ const UpdateUserReqSchema = {
   type: 'object',
   properties: {
     username: usernameProperties,
-    password: passwordProperties
+    password: passwordProperties,
+    status: {
+      type: 'string',
+      maxLength: 150
+    }
   },
   required: [
     'username',
-    'password'
+    'status'
   ]
 }
 

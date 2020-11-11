@@ -75,6 +75,7 @@ async function buildUserResponse (data) {
     id: userId,
     username: data.username,
     score: data.score,
+    status: data.status,
     createdAt: dayjs(createdAt).fromNow()
   }
 

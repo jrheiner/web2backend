@@ -5,7 +5,6 @@ const v = require('../_helper/reqValidation')
 const buildResponse = require('../_helper/buildResponse')
 const config = require('../config/config.json')
 const errorMessages = require('../_helper/errorMessages')
-const postController = require('./posts.controller')
 const chainDelete = require('../_helper/chainDelete')
 
 module.exports = {
@@ -104,7 +103,18 @@ function updateSelf (req, res) {
     return
   }
   const id = req.user.id
-  User.findByIdAndUpdate(id, req.body, { new: true }).then(data => {
+  const updatedUser = {
+    username: req.body.username,
+    status: req.body.status
+  }
+  console.log(updatedUser)
+  if (Object.prototype.hasOwnProperty.call(req.body, 'password')) {
+    updatedUser.hash = bcrypt.hashSync(req.body.password, 10)
+  }
+  console.log(updatedUser)
+  User.findByIdAndUpdate(id, {
+    $set: updatedUser
+  }, { new: true }).then(data => {
     if (!data) {
       res.status(404).send({ error: true, message: `Error updating user with id ${id}! User not found!` })
     } else {
