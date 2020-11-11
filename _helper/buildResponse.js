@@ -16,6 +16,7 @@ module.exports = {
 // TODO Register response needs still , maybe include success state
 // TODO validation/schema of json before sending back?
 // TODO DONT ALLOW SPACE IN USERNAME -> CHANGE ALSO IN FRONTEND
+// TODO if update user password field is empty leave same hash otherwise update password, check if req has password property
 async function buildPostResponse (data, authorInfo = true) {
   const userId = data.author
   const author = (authorInfo ? await User.getUsernameById(userId) : undefined)
