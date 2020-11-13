@@ -3,16 +3,20 @@ const mongoose = require('mongoose')
 
 // https://json-schema.org/draft/2019-09/json-schema-validation.html
 
+// https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username/12019115
 const usernameProperties = {
   type: 'string',
   minLength: 2,
-  maxLength: 16
+  maxLength: 16,
+  pattern: '^(?=[a-zA-Z0-9-_]{2,16}$)[^_-].*[^_-]$'
 }
 
+// https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
 const passwordProperties = {
   type: 'string',
   minLength: 5,
-  maxLength: 32
+  maxLength: 32,
+  pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,32}$'
 
 }
 
