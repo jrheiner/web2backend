@@ -1,8 +1,6 @@
 const Post = require('../models/post.model')
 const Comment = require('../models/comment.model')
 
-// TODO test new chain delete functions
-
 module.exports = {
   deleteUserChildren,
   deletePostChildren

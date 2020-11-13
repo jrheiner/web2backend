@@ -10,7 +10,9 @@ module.exports = {
   buildPostResponseMultiple,
   buildCommentResponse,
   buildCommentResponseMultiple,
-  buildUserResponse
+  buildUserResponse,
+  buildLoginResponse,
+  buildRegisterResponse
 }
 // TODO Login response still includes hash + what about token
 // TODO Register response needs still , maybe include success state
@@ -85,5 +87,20 @@ async function buildUserResponse (data) {
   return {
     ...userInfo,
     userActivity
+  }
+}
+
+function buildLoginResponse (data) {
+  return {
+    id: data._id,
+    username: data.username,
+    token: data.token
+  }
+}
+
+function buildRegisterResponse (data) {
+  return {
+    id: data._id,
+    username: data.username
   }
 }

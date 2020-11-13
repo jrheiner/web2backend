@@ -48,8 +48,11 @@ function findAll (req, res) {
 }
 
 function findOne (req, res) {
-  // TODO CHECK FOR VALID ID
   const id = req.params.id
+  if (!mongoose.isValidObjectId(id)) {
+    res.status(404).send({ error: true, message: `${id} is not a valid post id!` })
+    return
+  }
   Post.findById(id).then(data => {
     if (!data) {
       res.status(404).send({ error: true, message: `Post with id ${id} not found!` })

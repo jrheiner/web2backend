@@ -37,7 +37,7 @@ async function register (req, res) {
     score: 0
   })
   user.save(user).then(data => {
-    res.status(200).send(data)
+    res.status(200).send(buildResponse.buildRegisterResponse(data))
   }).catch(err => {
     console.log(err)
     res.status(500).send({ error: true, message: 'Error creating new user!' })
@@ -66,11 +66,11 @@ async function login (req, res) {
       audience: config.jwt_audience,
       issuer: config.jwt_issuer
     })
-    const response = {
+    const data = {
       ...user.toJSON(),
       token
     }
-    res.status(200).json(response)
+    res.status(200).send(buildResponse.buildLoginResponse(data))
   } else {
     res.status(400).send({
       error: true,
