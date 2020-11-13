@@ -11,6 +11,7 @@ module.exports = {
   register,
   login,
   findSelf,
+  findOne,
   updateSelf,
   deleteSelf
 }
@@ -79,7 +80,14 @@ async function login (req, res) {
 }
 
 function findSelf (req, res) {
-  const id = req.user.id
+  findOneById(req.user.id, req, res)
+}
+
+function findOne (req, res) {
+  findOneById(req.params.id, req, res)
+}
+
+function findOneById (id, req, res) {
   User.findById(id).then(data => {
     if (!data) {
       res.status(404).send({ error: true, message: `User with id ${id} not found!` })
