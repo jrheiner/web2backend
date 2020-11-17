@@ -1,11 +1,11 @@
-const User = require('../models/user.model')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
-const v = require('../_helper/reqValidation')
-const buildResponse = require('../_helper/buildResponse')
-const config = require('../config/config.json')
-const errorMessages = require('../_helper/errorMessages')
-const chainDelete = require('../_helper/chainDelete')
+const User = require('../models/user.model');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const v = require('../_helper/reqValidation');
+const buildResponse = require('../_helper/buildResponse');
+const config = require('../config/config.json');
+const errorMessages = require('../_helper/errorMessages');
+const chainDelete = require('../_helper/chainDelete');
 
 module.exports = {
   register,
@@ -13,140 +13,142 @@ module.exports = {
   findSelf,
   findOne,
   updateSelf,
-  deleteSelf
-}
+  deleteSelf,
+};
 
-async function register (req, res) {
-  const reqValidity = v.validateRegisterReq(req.body)
+async function register(req, res) {
+  const reqValidity = v.validateRegisterReq(req.body);
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
       message: errorMessages.invalidJson,
-      stack: reqValidity.errors[0].stack
-    })
-    return
+      stack: reqValidity.errors[0].stack,
+    });
+    return;
   }
-  if (await User.findOne({ username: req.body.username })) {
-    res.status(400).send({ error: true, message: 'Username already exists!' })
-    return
+  if (await User.findOne({username: req.body.username})) {
+    res.status(400).send({error: true, message: 'Username already exists!'});
+    return;
   }
-  const hash = bcrypt.hashSync(req.body.password, 10)
+  const hash = bcrypt.hashSync(req.body.password, 10);
   const user = new User({
     username: req.body.username,
     hash: hash,
-    score: 0
-  })
-  user.save(user).then(data => {
-    res.status(200).send(buildResponse.buildRegisterResponse(data))
-  }).catch(err => {
-    console.log(err)
-    res.status(500).send({ error: true, message: 'Error creating new user!' })
-  })
+    score: 0,
+  });
+  user.save(user).then((data) => {
+    res.status(200).send(buildResponse.buildRegisterResponse(data));
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({error: true, message: 'Error creating new user!'});
+  });
 }
 
-async function login (req, res) {
-  const reqValidity = v.validateLoginReq(req.body)
+async function login(req, res) {
+  const reqValidity = v.validateLoginReq(req.body);
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
       message: errorMessages.invalidJson,
-      stack: reqValidity.errors[0].stack
-    })
-    return
+      stack: reqValidity.errors[0].stack,
+    });
+    return;
   }
 
-  const user = await User.findOne({ username: req.body.username })
+  const user = await User.findOne({username: req.body.username});
   if (user && bcrypt.compareSync(req.body.password, user.hash)) {
     const token = jwt.sign({
-      id: user._id
+      id: user._id,
     },
     config.jwt,
     {
       expiresIn: config.jwt_expiresIn,
       audience: config.jwt_audience,
-      issuer: config.jwt_issuer
-    })
+      issuer: config.jwt_issuer,
+    });
     const data = {
       ...user.toJSON(),
-      token
-    }
-    res.status(200).send(buildResponse.buildLoginResponse(data))
+      token,
+    };
+    res.status(200).send(buildResponse.buildLoginResponse(data));
   } else {
     res.status(400).send({
       error: true,
-      message: errorMessages.invalidLogin
-    })
+      message: errorMessages.invalidLogin,
+    });
   }
 }
 
-function findSelf (req, res) {
-  findOneById(req.user.id, req, res)
+function findSelf(req, res) {
+  findOneById(req.user.id, req, res);
 }
 
-function findOne (req, res) {
-  findOneById(req.params.id, req, res)
+function findOne(req, res) {
+  findOneById(req.params.id, req, res);
 }
 
-function findOneById (id, req, res) {
-  User.findById(id).then(data => {
+function findOneById(id, req, res) {
+  User.findById(id).then((data) => {
     if (!data) {
-      res.status(404).send({ error: true, message: `User with id ${id} not found!` })
+      res.status(404).send({error: true, message: `User with id ${id} not found!`});
     } else {
-      buildResponse.buildUserResponse(data).then(data => { res.status(200).send(data) })
+      buildResponse.buildUserResponse(data).then((data) => {
+        res.status(200).send(data);
+      });
     }
-  }).catch(err => {
-    console.log(err)
-    res.status(500).send({ error: true, message: `Error getting user with id ${id}!` })
-  })
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({error: true, message: `Error getting user with id ${id}!`});
+  });
 }
 
-function updateSelf (req, res) {
-  const reqValidity = v.validateUpdateUserReq(req.body)
+function updateSelf(req, res) {
+  const reqValidity = v.validateUpdateUserReq(req.body);
   if (!reqValidity.valid) {
     res.status(400).send({
       error: true,
       message: errorMessages.invalidJson,
-      stack: reqValidity.errors[0].stack
-    })
-    return
+      stack: reqValidity.errors[0].stack,
+    });
+    return;
   }
-  const id = req.user.id
+  const id = req.user.id;
   const updatedUser = {
     username: req.body.username,
-    status: req.body.status
-  }
-  console.log(updatedUser)
+    status: req.body.status,
+  };
+  console.log(updatedUser);
   if (Object.prototype.hasOwnProperty.call(req.body, 'password')) {
-    updatedUser.hash = bcrypt.hashSync(req.body.password, 10)
+    updatedUser.hash = bcrypt.hashSync(req.body.password, 10);
   }
-  console.log(updatedUser)
+  console.log(updatedUser);
   User.findByIdAndUpdate(id, {
-    $set: updatedUser
-  }, { new: true }).then(data => {
+    $set: updatedUser,
+  }, {new: true}).then((data) => {
     if (!data) {
-      res.status(404).send({ error: true, message: `Error updating user with id ${id}! User not found!` })
+      res.status(404).send({error: true, message: `Error updating user with id ${id}! User not found!`});
     } else {
-      res.status(200).send(data)
+      res.status(200).send(data);
     }
-  }).catch(err => {
-    console.log(err)
-    res.status(500).send({ error: true, message: `Error updating user with id ${id}!` })
-  })
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({error: true, message: `Error updating user with id ${id}!`});
+  });
 }
 
-function deleteSelf (req, res) {
-  const id = req.user.id
-  User.findByIdAndDelete(id).then(data => {
+function deleteSelf(req, res) {
+  const id = req.user.id;
+  User.findByIdAndDelete(id).then((data) => {
     if (!data) {
-      res.status(404).send({ error: true, message: `Error deleting user with id ${id}! User not found!` })
+      res.status(404).send({error: true, message: `Error deleting user with id ${id}! User not found!`});
     } else {
       chainDelete.deleteUserChildren(id).then((data) => {
-        console.log(data)
-        res.sendStatus(204)
-      })
+        console.log(data);
+        res.sendStatus(204);
+      });
     }
-  }).catch(err => {
-    console.log(err)
-    res.status(500).send({ error: true, message: `Error deleting user with id ${id}!` })
-  })
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({error: true, message: `Error deleting user with id ${id}!`});
+  });
 }

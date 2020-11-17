@@ -1,15 +1,14 @@
 module.exports = {
-  env: {
+  'env': {
     node: true,
     commonjs: true,
-    es2021: true
+    es2020: true,
   },
-  extends: [
-    'standard'
+  'extends': [
+    'eslint:recommended', 'google',
   ],
-  parserOptions: {
-    ecmaVersion: 12
+  'rules': {
+    'require-jsdoc': 'off',
+    'new-cap': 'off',
   },
-  rules: {
-  }
-}
+};
