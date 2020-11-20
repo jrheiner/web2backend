@@ -3,6 +3,7 @@ module.exports = {
     node: true,
     commonjs: true,
     es2020: true,
+    mocha: true,
   },
   'extends': [
     'eslint:recommended', 'google',

@@ -3,6 +3,7 @@ const del = require('del');
 const log = require('fancy-log');
 const eslint = require('gulp-eslint');
 const exec = require('child_process').exec;
+const mocha = require('gulp-mocha');
 
 function lint(cb) {
   return src(['**/*.js', '!node_modules/**', '!public/**'])
@@ -11,6 +12,20 @@ function lint(cb) {
       .on('end', function() {
         cb();
       });
+}
+
+// function mocha(cb) {
+//  log('Running tests');
+//  return exec('npm test',
+//      function(err, stdout, stderr) {
+//        log(stdout);
+//        log(stderr);
+//        cb(err);
+//      });
+// }
+function mochaTest(cb) {
+  src('test.js', {read: false}).pipe(mocha());
+  cb();
 }
 
 function clean() {
@@ -36,6 +51,7 @@ function copyAngularCodeTask() {
 
 exports.default = series(
     lint,
+    mochaTest,
     clean,
     buildAngularCodeTask,
     copyAngularCodeTask,
