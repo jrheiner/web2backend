@@ -6,10 +6,12 @@ const buildResponse = require('../_helper/buildResponse');
 const config = require('../config/config.json');
 const errorMessages = require('../_helper/errorMessages');
 const chainDelete = require('../_helper/chainDelete');
+const mongoose = require('mongoose');
 
 module.exports = {
   register,
   login,
+  check,
   findSelf,
   findOne,
   updateSelf,
@@ -26,7 +28,7 @@ async function register(req, res) {
     });
     return;
   }
-  if (await User.findOne({username: req.body.username})) {
+  if (await User.exists({username: req.body.username})) {
     res.status(400).send({error: true, message: 'Username already exists!'});
     return;
   }
@@ -79,6 +81,15 @@ async function login(req, res) {
   }
 }
 
+function check(req, res) {
+  if (req.params.username) {
+    User.exists({username: req.params.username.toString().toLowerCase()})
+        .then((data) => {
+          res.status(200).send({unique: !data});
+        });
+  }
+}
+
 function findSelf(req, res) {
   findOneById(req.user.id, req, res);
 }
@@ -88,9 +99,17 @@ function findOne(req, res) {
 }
 
 function findOneById(id, req, res) {
+  if (!mongoose.isValidObjectId(id)) {
+    res.status(404).send(
+        {error: true, message: `${id} is not a valid user id!`},
+    );
+    return;
+  }
   User.findById(id).then((data) => {
     if (!data) {
-      res.status(404).send({error: true, message: `User with id ${id} not found!`});
+      res.status(404).send(
+          {error: true, message: `User with id ${id} not found!`},
+      );
     } else {
       buildResponse.buildUserResponse(data).then((data) => {
         res.status(200).send(data);
@@ -98,11 +117,13 @@ function findOneById(id, req, res) {
     }
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({error: true, message: `Error getting user with id ${id}!`});
+    res.status(500).send(
+        {error: true, message: `Error getting user with id ${id}!`},
+    );
   });
 }
 
-function updateSelf(req, res) {
+async function updateSelf(req, res) {
   const reqValidity = v.validateUpdateUserReq(req.body);
   if (!reqValidity.valid) {
     res.status(400).send({
@@ -113,11 +134,17 @@ function updateSelf(req, res) {
     return;
   }
   const id = req.user.id;
-  const updatedUser = {
-    username: req.body.username,
-    status: req.body.status,
-  };
-  console.log(updatedUser);
+  const updatedUser = {};
+  if (Object.prototype.hasOwnProperty.call(req.body, 'username')) {
+    if (await User.exists({username: req.body.username})) {
+      res.status(400).send({error: true, message: 'Username already exists!'});
+      return;
+    }
+    updatedUser.username = req.body.username;
+  }
+  if (Object.prototype.hasOwnProperty.call(req.body, 'status')) {
+    updatedUser.status = req.body.status;
+  }
   if (Object.prototype.hasOwnProperty.call(req.body, 'password')) {
     updatedUser.hash = bcrypt.hashSync(req.body.password, 10);
   }
@@ -126,13 +153,20 @@ function updateSelf(req, res) {
     $set: updatedUser,
   }, {new: true}).then((data) => {
     if (!data) {
-      res.status(404).send({error: true, message: `Error updating user with id ${id}! User not found!`});
+      res.status(404).send(
+          {
+            error: true,
+            message: `Error updating user with id ${id}! User not found!`,
+          },
+      );
     } else {
       res.status(200).send(data);
     }
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({error: true, message: `Error updating user with id ${id}!`});
+    res.status(500).send(
+        {error: true, message: `Error updating user with id ${id}!`},
+    );
   });
 }
 
@@ -140,7 +174,12 @@ function deleteSelf(req, res) {
   const id = req.user.id;
   User.findByIdAndDelete(id).then((data) => {
     if (!data) {
-      res.status(404).send({error: true, message: `Error deleting user with id ${id}! User not found!`});
+      res.status(404).send(
+          {
+            error: true,
+            message: `Error deleting user with id ${id}! User not found!`,
+          },
+      );
     } else {
       chainDelete.deleteUserChildren(id).then((data) => {
         console.log(data);
@@ -149,6 +188,11 @@ function deleteSelf(req, res) {
     }
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({error: true, message: `Error deleting user with id ${id}!`});
+    res.status(500).send(
+        {
+          error: true,
+          message: `Error deleting user with id ${id}!`,
+        },
+    );
   });
 }

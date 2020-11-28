@@ -59,7 +59,6 @@ const UpdateUserReqSchema = {
     },
   },
   required: [
-    'username',
     'status',
   ],
 };
