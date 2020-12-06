@@ -25,7 +25,13 @@ app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
 app.use('/api/user', userRouter);
 
-// TODO Post description should keep format (e.g. new lines and so on)
+// TODO Migrate backend to typescript (including linting)
+/*
+  TODO Gulp file to build dev (install and build doc)
+  and prod environment (build frontend, bundle js, lint, tests)
+*/
+// TODO Mocha tests (idk api endpoints maybe)
+// TODO Backend documentation + doc builder
 
 // TODO implement general error handling
 app.use(function(err, req, res, next) {
