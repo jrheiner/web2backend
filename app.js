@@ -30,6 +30,9 @@ app.use('/api/user', userRouter);
   TODO Gulp file to build dev (install and build doc)
   and prod environment (build frontend, bundle js, lint, tests)
 */
+
+// TODO Organize frontend angular components in modules
+
 // TODO Mocha tests (idk api endpoints maybe)
 // TODO Backend documentation + doc builder
 
