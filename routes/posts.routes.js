@@ -9,5 +9,7 @@ router.get('/', postController.findAll);
 router.get('/:id', postController.findOne);
 router.put('/:id', auth, postController.updateOne);
 router.delete('/:id', auth, postController.deleteOne);
+router.get('/:id/vote', auth, postController.addVote);
+router.delete('/:id/vote', auth, postController.deleteVote);
 
 module.exports = router;

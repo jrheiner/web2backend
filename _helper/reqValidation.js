@@ -15,18 +15,18 @@ function validateRegisterReq(registerReq) {
   return v.validate(registerReq, ReqSchemes.RegisterReqSchema);
 }
 
-function validateLoginReq(registerReq) {
-  return v.validate(registerReq, ReqSchemes.LoginReqSchema);
+function validateLoginReq(loginReq) {
+  return v.validate(loginReq, ReqSchemes.LoginReqSchema);
 }
 
-function validateUpdateUserReq(registerReq) {
-  return v.validate(registerReq, ReqSchemes.UpdateUserReqSchema);
+function validateUpdateUserReq(updateReq) {
+  return v.validate(updateReq, ReqSchemes.UpdateUserReqSchema);
 }
 
-function validatePostReq(registerReq) {
-  return v.validate(registerReq, ReqSchemes.PostReqSchema);
+function validatePostReq(postReq) {
+  return v.validate(postReq, ReqSchemes.PostReqSchema);
 }
 
-function validateCommentReq(registerReq) {
-  return v.validate(registerReq, ReqSchemes.CommentReqSchema);
+function validateCommentReq(commentReq) {
+  return v.validate(commentReq, ReqSchemes.CommentReqSchema);
 }

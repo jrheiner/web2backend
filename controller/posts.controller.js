@@ -2,6 +2,7 @@ const v = require('../_helper/reqValidation');
 const errorMessages = require('../_helper/errorMessages');
 const buildResponse = require('../_helper/buildResponse');
 const Post = require('../models/post.model');
+const Vote = require('../models/vote.model');
 const mongoose = require('mongoose');
 const chainDelete = require('../_helper/chainDelete');
 
@@ -11,6 +12,8 @@ module.exports = {
   findOne,
   updateOne,
   deleteOne,
+  addVote,
+  deleteVote,
 };
 
 function create(req, res) {
@@ -52,12 +55,20 @@ function findAll(req, res) {
 function findOne(req, res) {
   const id = req.params.id;
   if (!mongoose.isValidObjectId(id)) {
-    res.status(404).send({error: true, message: `${id} is not a valid post id!`});
+    res.status(404).send(
+        {
+          error: true, message: `${id} is not a valid post id!`,
+        },
+    );
     return;
   }
   Post.findById(id).then((data) => {
     if (!data) {
-      res.status(404).send({error: true, message: `Post with id ${id} not found!`});
+      res.status(404).send(
+          {
+            error: true, message: `Post with id ${id} not found!`,
+          },
+      );
     } else {
       buildResponse.buildPostResponse(data).then((data) => {
         res.status(200).send(data);
@@ -65,7 +76,11 @@ function findOne(req, res) {
     }
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({error: true, message: `Error getting post with id ${id}!`});
+    res.status(500).send(
+        {
+          error: true, message: `Error getting post with id ${id}!`,
+        },
+    );
   });
 }
 
@@ -73,16 +88,28 @@ async function checkPrivileges(userId, postId, res) {
   if (mongoose.isValidObjectId(postId)) {
     const postToEdit = await Post.findById(postId);
     if (!postToEdit) {
-      res.status(404).send({error: true, message: `Post with id ${postId} not found!`});
+      res.status(404).send(
+          {
+            error: true, message: `Post with id ${postId} not found!`,
+          },
+      );
       return false;
     } else if (postToEdit.author.toString() === userId.toString()) {
       return true;
     } else {
-      res.status(401).send({error: true, message: errorMessages.invalidPrivileges});
+      res.status(401).send(
+          {
+            error: true, message: errorMessages.invalidPrivileges,
+          },
+      );
       return false;
     }
   } else {
-    res.status(404).send({error: true, message: `${postId} is an invalid post id!`});
+    res.status(404).send(
+        {
+          error: true, message: `${postId} is an invalid post id!`,
+        },
+    );
   }
 }
 
@@ -103,7 +130,11 @@ async function updateOne(req, res) {
   }
   Post.findByIdAndUpdate(postId, req.body, {new: true}).then((data) => {
     if (!data) {
-      res.status(404).send({error: true, message: `Error updating post with id ${postId}!`});
+      res.status(404).send(
+          {
+            error: true, message: `Error updating post with id ${postId}!`,
+          },
+      );
     } else {
       buildResponse.buildPostResponse(data).then((data) => {
         res.status(200).send(data);
@@ -111,7 +142,11 @@ async function updateOne(req, res) {
     }
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({error: true, message: `Error updating post with id ${postId}!`});
+    res.status(500).send(
+        {
+          error: true, message: `Error updating post with id ${postId}!`,
+        },
+    );
   });
 }
 
@@ -123,7 +158,12 @@ async function deleteOne(req, res) {
   }
   Post.findByIdAndDelete(postId).then((data) => {
     if (!data) {
-      res.status(404).send({error: true, message: `Error deleting post with id ${postId}! Post not found!`});
+      res.status(404).send(
+          {
+            error: true,
+            message: `Error deleting post with id ${postId}! Post not found!`,
+          },
+      );
     } else {
       chainDelete.deletePostChildren(postId).then((data) => {
         console.log(data);
@@ -132,6 +172,76 @@ async function deleteOne(req, res) {
     }
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({error: true, message: `Error deleting post with id ${postId}!`});
+    res.status(500).send(
+        {
+          error: true, message: `Error deleting post with id ${postId}!`,
+        },
+    );
+  });
+}
+
+async function addVote(req, res) {
+  const userId = req.user.id;
+  const postId = req.params.id;
+  if (!mongoose.isValidObjectId(postId)) {
+    res.status(404).send(
+        {
+          error: true, message: 'Invalid post id!',
+        },
+    );
+    return;
+  }
+  if (await Vote.exists({user: userId, post: postId})) {
+    res.status(400).send(
+        {
+          error: true, message: 'User has already liked this post!',
+        },
+    );
+    return;
+  }
+  const vote = new Vote({
+    user: userId,
+    post: postId,
+  });
+  vote.save(vote).then(() => {
+    Post.findByIdAndUpdate(postId, {$inc: {score: 1}} ).then(()=>{
+      res.sendStatus(204);
+    }).catch((err) => {
+      console.log(err);
+      res.status(500).send({error: true, message: 'Error liking post!'});
+    });
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send({error: true, message: 'Error liking post!'});
+  });
+}
+
+function deleteVote(req, res) {
+  const userId = req.user.id;
+  const postId = req.params.id;
+  if (!mongoose.isValidObjectId(postId)) {
+    res.status(404).send(
+        {
+          error: true, message: 'Invalid post id!',
+        },
+    );
+    return;
+  }
+
+  Vote.deletePair(userId, postId).then((data) => {
+    console.log(data);
+    Post.findByIdAndUpdate(postId, {$inc: {score: -1}} ).then(()=>{
+      res.sendStatus(204);
+    }).catch((err) => {
+      console.log(err);
+      res.status(500).send({error: true, message: 'Error deleting like!'});
+    });
+  }).catch((err) => {
+    console.log(err);
+    res.status(500).send(
+        {
+          error: true, message: `Error deleting like for post ${postId}!`,
+        },
+    );
   });
 }
