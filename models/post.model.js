@@ -15,7 +15,6 @@ const PostSchema = new mongoose.Schema({
     type: String,
     maxlength: 2000,
   },
-  score: Number,
   public: {
     type: Boolean,
     default: true,

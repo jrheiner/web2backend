@@ -19,8 +19,16 @@ VoteSchema.static('findManyByUser', function(userId) {
   return this.find({user: userId});
 });
 
+VoteSchema.static('getVoteCountPost', function(postId) {
+  return this.countDocuments({post: postId});
+});
+
 VoteSchema.static('deleteByUser', function(userId) {
   return this.deleteMany({user: userId});
+});
+
+VoteSchema.static('deleteByPost', function(postId) {
+  return this.deleteMany({post: postId});
 });
 
 VoteSchema.static('deletePair', function(userId, postId) {

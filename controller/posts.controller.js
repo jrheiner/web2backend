@@ -30,7 +30,6 @@ function create(req, res) {
     author: req.user.id,
     title: req.body.title,
     description: req.body.description,
-    score: 0,
     public: req.body.public ? req.body.public : true,
   });
   post.save(post).then((data) => {
@@ -206,17 +205,11 @@ async function addVote(req, res) {
     post: postId,
   });
   vote.save(vote).then(() => {
-    Post.findByIdAndUpdate(postId, {$inc: {score: 1}} ).then(()=>{
-      res.status(200).send(
-          {
-            success: true,
-            time: Math.floor(new Date().getTime() / 1000),
-          },
-      );
-    }).catch((err) => {
-      console.log(err);
-      res.status(500).send({error: true, message: 'Error liking post!'});
-    });
+    res.status(200).send({
+      success: true,
+      time: Math.floor(new Date().getTime() / 1000),
+    },
+    );
   }).catch((err) => {
     console.log(err);
     res.status(500).send({error: true, message: 'Error liking post!'});
@@ -237,12 +230,7 @@ function deleteVote(req, res) {
 
   Vote.deletePair(userId, postId).then((data) => {
     console.log(data);
-    Post.findByIdAndUpdate(postId, {$inc: {score: -1}} ).then(()=>{
-      res.sendStatus(204);
-    }).catch((err) => {
-      console.log(err);
-      res.status(500).send({error: true, message: 'Error deleting like!'});
-    });
+    res.sendStatus(204);
   }).catch((err) => {
     console.log(err);
     res.status(500).send(

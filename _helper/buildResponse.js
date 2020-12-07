@@ -1,5 +1,6 @@
 const User = require('../models/user.model');
 const Post = require('../models/post.model');
+const Vote = require('../models/vote.model');
 const Comment = require('../models/comment.model');
 const dayjs = require('dayjs');
 const relativeTime = require('dayjs/plugin/relativeTime');
@@ -20,6 +21,7 @@ module.exports = {
 async function buildPostResponse(data, authorInfo = true) {
   const userId = data.author;
   const author = (authorInfo ? await User.getUsernameById(userId) : undefined);
+  const score = await Vote.getVoteCountPost(data._id);
   const createdAt = data.createdAt;
   const updatedAt = data.updatedAt;
 
@@ -28,7 +30,7 @@ async function buildPostResponse(data, authorInfo = true) {
     author: author,
     title: data.title,
     description: data.description,
-    score: data.score,
+    score: score,
     createdAt: dayjs(createdAt).fromNow(),
     updatedAt: dayjs(updatedAt).fromNow(),
   };
