@@ -36,7 +36,6 @@ async function register(req, res) {
   const user = new User({
     username: req.body.username,
     hash: hash,
-    score: 0,
   });
   user.save(user).then((data) => {
     res.status(200).send(buildResponse.buildRegisterResponse(data));

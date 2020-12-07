@@ -16,7 +16,6 @@ const CommentSchema = new mongoose.Schema({
     maxlength: 500,
     required: true,
   },
-  score: Number,
 }, {
   timestamps: true,
 });

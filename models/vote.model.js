@@ -15,8 +15,8 @@ const VoteSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-VoteSchema.static('findManyByUser', function(userId) {
-  return this.find({user: userId});
+VoteSchema.static('getVoteCountUser', function(userId) {
+  return this.countDocuments({user: userId});
 });
 
 VoteSchema.static('getVoteCountPost', function(postId) {

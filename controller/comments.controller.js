@@ -26,7 +26,6 @@ function create(req, res) {
     parent: req.body.parent,
     author: req.user.id,
     description: req.body.description,
-    score: 0,
   });
   comment.save(comment).then((data) => {
     res.status(200).send(data);

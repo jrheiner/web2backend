@@ -15,8 +15,7 @@ module.exports = {
   buildLoginResponse,
   buildRegisterResponse,
 };
-// TODO Login response still includes hash + what about token
-// TODO Register response needs still , maybe include success state
+
 // TODO validation/schema of json before sending back?
 async function buildPostResponse(data, authorInfo = true) {
   const userId = data.author;
@@ -55,7 +54,6 @@ async function buildCommentResponse(data, authorInfo = true) {
     parent: data.parent,
     author: author,
     description: data.description,
-    score: data.score,
     createdAt: dayjs(createdAt).fromNow(),
     updatedAt: dayjs(updatedAt).fromNow(),
   };
@@ -72,11 +70,12 @@ async function buildCommentResponseMultiple(data, authorInfo = true) {
 async function buildUserResponse(data) {
   const userId = data._id;
   const createdAt = data.createdAt;
+  const score = await Vote.getVoteCountUser(userId);
 
   const userInfo = {
     id: userId,
     username: data.username,
-    score: data.score,
+    score: score,
     status: data.status,
     createdAt: dayjs(createdAt).fromNow(),
   };

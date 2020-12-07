@@ -15,7 +15,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-  score: Number,
 }, {
   timestamps: true,
 });
