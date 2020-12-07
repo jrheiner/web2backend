@@ -192,9 +192,11 @@ async function addVote(req, res) {
     return;
   }
   if (await Vote.exists({user: userId, post: postId})) {
-    res.status(400).send(
+    res.status(200).send(
         {
-          error: true, message: 'User has already liked this post!',
+          success: false,
+          message: 'User has already liked this post!',
+          time: Math.floor(new Date().getTime() / 1000),
         },
     );
     return;
@@ -205,7 +207,12 @@ async function addVote(req, res) {
   });
   vote.save(vote).then(() => {
     Post.findByIdAndUpdate(postId, {$inc: {score: 1}} ).then(()=>{
-      res.sendStatus(204);
+      res.status(200).send(
+          {
+            success: true,
+            time: Math.floor(new Date().getTime() / 1000),
+          },
+      );
     }).catch((err) => {
       console.log(err);
       res.status(500).send({error: true, message: 'Error liking post!'});
