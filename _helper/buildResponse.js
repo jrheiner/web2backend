@@ -70,7 +70,9 @@ async function buildCommentResponseMultiple(data, authorInfo = true) {
 async function buildUserResponse(data) {
   const userId = data._id;
   const createdAt = data.createdAt;
-  const score = await Vote.getVoteCountUser(userId);
+  const postsByUser = await Post.findManyByUser(userId).select('_id');
+  const postIds = postsByUser.map((e) => e._id);
+  const score = await Vote.getVoteCountMultiplePost(postIds);
 
   const userInfo = {
     id: userId,

@@ -15,8 +15,8 @@ const VoteSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-VoteSchema.static('getVoteCountUser', function(userId) {
-  return this.countDocuments({user: userId});
+VoteSchema.static('getVoteCountMultiplePost', function(postIds) {
+  return this.countDocuments({post: {$in: postIds}});
 });
 
 VoteSchema.static('getVoteCountPost', function(postId) {
@@ -34,5 +34,6 @@ VoteSchema.static('deleteByPost', function(postId) {
 VoteSchema.static('deletePair', function(userId, postId) {
   return this.deleteOne({user: userId, post: postId});
 });
+
 
 module.exports = mongoose.model('Vote', VoteSchema);
