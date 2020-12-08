@@ -95,17 +95,12 @@ const CommentReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   type: 'object',
   properties: {
-    parent: {
-      type: 'string',
-      format: 'mongooseId',
-    },
     description: {
       type: 'string',
       maxLength: 500,
     },
   },
   required: [
-    'parent',
     'description',
   ],
 };

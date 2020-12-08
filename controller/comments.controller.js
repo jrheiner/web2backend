@@ -1,4 +1,5 @@
 const Comment = require('../models/comment.model');
+const Post = require('../models/post.model');
 const v = require('../_helper/reqValidation');
 const errorMessages = require('../_helper/errorMessages');
 const mongoose = require('mongoose');
@@ -12,7 +13,7 @@ module.exports = {
   deleteOne,
 };
 
-function create(req, res) {
+async function create(req, res) {
   const reqValidity = v.validateCommentReq(req.body);
   if (!reqValidity.valid) {
     res.status(400).send({
@@ -22,8 +23,22 @@ function create(req, res) {
     });
     return;
   }
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).send(
+        {error: true, message: `${req.params.id} is an invalid post id!`},
+    );
+    return;
+  }
+  if (!await Post.exists({_id: req.params.id})) {
+    res.status(404).send(
+        {
+          error: true, message: `Post ${req.params.id} not found!`,
+        },
+    );
+    return;
+  }
   const comment = new Comment({
-    parent: req.body.parent,
+    parent: req.params.id,
     author: req.user.id,
     description: req.body.description,
   });
