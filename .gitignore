@@ -117,3 +117,4 @@ dist
 
 # Config file
 config/config.json
+/config/
