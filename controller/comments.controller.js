@@ -42,7 +42,7 @@ async function create(req, res) {
     author: req.user.id,
     description: req.body.description,
   });
-  comment.save(comment).then((data) => {
+  comment.save(comment).then(() => {
     res.sendStatus(204);
   }).catch((err) => {
     console.log(err);
