@@ -43,7 +43,7 @@ async function create(req, res) {
     description: req.body.description,
   });
   comment.save(comment).then((data) => {
-    res.status(200).send(data);
+    res.sendStatus(204);
   }).catch((err) => {
     console.log(err);
     res.status(500).send({error: true, message: 'Error creating new comment!'});
