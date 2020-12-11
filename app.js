@@ -18,12 +18,18 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
+
 app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
 app.use('/api/user', userRouter);
+app.get('*.*', express.static('public'));
+app.all('*', function(req, res) {
+  res.status(200).sendFile('/', {root: 'public'});
+});
+
 
 // TODO Migrate backend to typescript (including linting)
 /*

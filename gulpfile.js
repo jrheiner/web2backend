@@ -35,7 +35,7 @@ function clean() {
 
 function buildAngularCodeTask(cb) {
   log('Building FrontEnd code');
-  return exec('cd ../FrontEnd && ng build --prod=true',
+  return exec('cd ../FrontEnd && ng build --prod=true --base-href "/"',
       function(err, stdout, stderr) {
         log(stdout);
         log(stderr);
