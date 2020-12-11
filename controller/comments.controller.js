@@ -119,7 +119,7 @@ async function updateOne(req, res) {
       res.status(404).send({error: true, message: `Error updating comment with id ${commentId}! Comment not found!`});
     } else {
       buildResponse.buildCommentResponse(data).then((data) => {
-        res.status(200).send(data);
+        res.status(200).send({description: data.description});
       });
     }
   }).catch((err) => {
