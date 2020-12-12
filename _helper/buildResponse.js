@@ -1,6 +1,7 @@
 const User = require('../models/user.model');
 const Post = require('../models/post.model');
 const Vote = require('../models/vote.model');
+const Image = require('../models/image.model');
 const Comment = require('../models/comment.model');
 const dayjs = require('dayjs');
 const relativeTime = require('dayjs/plugin/relativeTime');
@@ -21,6 +22,14 @@ async function buildPostResponse(data, authorInfo = true) {
   const userId = data.author;
   const author = (authorInfo ? await User.getUsernameById(userId) : undefined);
   const score = await Vote.getVoteCountPost(data._id);
+  const type = data.type;
+  let images;
+  if (type === 'img') {
+    images = await Image.getImageByPost(data._id);
+    images = images.map((e) => e._id);
+  } else {
+    images = undefined;
+  }
   const createdAt = data.createdAt;
   const updatedAt = data.updatedAt;
 
@@ -30,6 +39,8 @@ async function buildPostResponse(data, authorInfo = true) {
     title: data.title,
     description: data.description,
     score: score,
+    type: type,
+    images: images,
     createdAt: dayjs(createdAt).fromNow(),
     updatedAt: dayjs(updatedAt).fromNow(),
   };

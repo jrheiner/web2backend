@@ -77,12 +77,20 @@ const PostReqSchema = {
       type: 'string',
       maxLength: 2000,
     },
-    public: {
-      type: 'boolean',
+    type: {
+      type: 'string',
+      enum: ['text', 'img', 'link'],
+    },
+    images: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
     },
   },
   required: [
     'title',
+    'description',
   ],
 };
 

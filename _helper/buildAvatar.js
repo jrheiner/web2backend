@@ -9,7 +9,7 @@ function buildAndSaveAvatar(userId, username, size = 500) {
     padding: 0.025,
   });
   const avatar = jdenticon.toPng(username.toLowerCase(), size);
-  fs.writeFileSync('public/avatars/'+userId+'.png', avatar);
+  fs.writeFileSync(`public/avatars/${userId}.png`, avatar);
 }
 
 

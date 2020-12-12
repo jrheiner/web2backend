@@ -15,9 +15,10 @@ const PostSchema = new mongoose.Schema({
     type: String,
     maxlength: 2000,
   },
-  public: {
-    type: Boolean,
-    default: true,
+  type: {
+    type: String,
+    enum: ['text', 'img', 'link'],
+    default: 'text',
   },
 }, {
   timestamps: true,

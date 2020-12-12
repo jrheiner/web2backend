@@ -1,6 +1,7 @@
 const v = require('../_helper/reqValidation');
 const errorMessages = require('../_helper/errorMessages');
 const buildResponse = require('../_helper/buildResponse');
+const imgPost = require('../_helper/saveImagePost');
 const Post = require('../models/post.model');
 const Vote = require('../models/vote.model');
 const mongoose = require('mongoose');
@@ -30,10 +31,15 @@ function create(req, res) {
     author: req.user.id,
     title: req.body.title,
     description: req.body.description,
-    public: req.body.public ? req.body.public : true,
+    type: req.body.type,
   });
   post.save(post).then((data) => {
     res.status(200).send(data);
+    req.body.images.forEach((b64image) => {
+      if (b64image !== '') {
+        imgPost.saveImageFromPost(data._id, b64image);
+      }
+    });
   }).catch((err) => {
     console.log(err);
     res.status(500).send({error: true, message: 'Error creating new post!'});
