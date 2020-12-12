@@ -23,20 +23,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="22142bf9-6238-4fc9-b23e-bebc275145aa" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/_helper/buildAvatar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/avatars/5fcfcc3a0871b20a1c421239.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/avatars/5fd4b7996fbf5f4d3cbe2d67.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/main.fa01c06414be99d550da.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/avatars/5fd4cbee6fbf5f4d3cbe2d7a.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_helper/buildAvatar.js" beforeDir="false" afterPath="$PROJECT_DIR$/_helper/buildAvatar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/user.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/user.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulpfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/gulpfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/main.caec6db61eb03b8a6c2e.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/3rdpartylicenses.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/main.fa01c06414be99d550da.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/polyfills.9bf4dad123bd95dda86e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/runtime.359d5ee4682f20e936e9.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/scripts.a73844de5f291be94c3b.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/styles.3b94b19382624e6b9362.css" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,7 +148,7 @@
       <workItem from="1607338499319" duration="29139000" />
       <workItem from="1607618304619" duration="6092000" />
       <workItem from="1607704263314" duration="6146000" />
-      <workItem from="1607766292943" duration="9574000" />
+      <workItem from="1607766292943" duration="10844000" />
     </task>
     <servers />
   </component>
