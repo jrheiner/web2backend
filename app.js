@@ -1,12 +1,10 @@
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const config = require('./config/config.json');
 
-const indexRouter = require('./routes/index');
 const postRouter = require('./routes/posts.routes');
 const commentRouter = require('./routes/comments.routes');
 const userRouter = require('./routes/user.routes');
@@ -18,9 +16,6 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', indexRouter);
 
 app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);

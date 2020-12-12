@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const v = require('../_helper/reqValidation');
 const buildResponse = require('../_helper/buildResponse');
 const config = require('../config/config.json');
+const avatar = require('../_helper/buildAvatar');
 const errorMessages = require('../_helper/errorMessages');
 const chainDelete = require('../_helper/chainDelete');
 const mongoose = require('mongoose');
@@ -38,6 +39,7 @@ async function register(req, res) {
     hash: hash,
   });
   user.save(user).then((data) => {
+    avatar.buildAndSaveAvatar(data._id, data.username);
     res.status(200).send(buildResponse.buildRegisterResponse(data));
   }).catch((err) => {
     console.log(err);

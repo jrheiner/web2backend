@@ -30,7 +30,8 @@ function mochaTest(cb) {
 
 function clean() {
   log('Removing angular build files');
-  return del('public/**', {force: true});
+  return del(['public/**', '!public/avatars', '!public/avatars/*.png'],
+      {force: true});
 }
 
 function buildAngularCodeTask(cb) {
