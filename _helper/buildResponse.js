@@ -26,7 +26,7 @@ async function buildPostResponse(data, authorInfo = true) {
   let images;
   if (type === 'img') {
     images = await Image.getImageByPost(data._id);
-    images = images.map((e) => e._id);
+    images = images.map((e) => e.name);
   } else {
     images = undefined;
   }
