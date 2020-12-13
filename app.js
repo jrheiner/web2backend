@@ -4,15 +4,17 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const config = require('./config/config.json');
-
+const compression = require('compression');
 const postRouter = require('./routes/posts.routes');
 const commentRouter = require('./routes/comments.routes');
 const userRouter = require('./routes/user.routes');
+const projectStats = require('./_helper/projectStats');
 
 const app = express();
 
 app.use(logger('dev'));
 app.use(helmet());
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -20,6 +22,9 @@ app.use(cookieParser());
 app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
 app.use('/api/user', userRouter);
+
+app.get('/api/', projectStats);
+
 app.get('*.*', express.static('public'));
 app.all('*', function(req, res) {
   res.status(200).sendFile('/', {root: 'public'});

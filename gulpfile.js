@@ -32,7 +32,7 @@ function clean() {
   log('Removing angular build files');
   return del(['public/**',
     '!public/avatars', '!public/avatars/*.png',
-    '!public/assets', '!public/assets/**',
+    '!public/assets', '!public/assets/*.png',
   ],
   {force: true});
 }
