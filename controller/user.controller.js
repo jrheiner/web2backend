@@ -161,7 +161,9 @@ async function updateSelf(req, res) {
           },
       );
     } else {
-      res.status(200).send(data);
+      buildResponse.buildUserResponse(data).then((data) => {
+        res.status(200).send(data);
+      });
     }
   }).catch((err) => {
     console.log(err);
