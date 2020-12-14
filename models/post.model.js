@@ -20,6 +20,9 @@ const PostSchema = new mongoose.Schema({
     enum: ['text', 'img', 'link'],
     default: 'text',
   },
+  link: {
+    type: String,
+  },
 }, {
   timestamps: true,
 });

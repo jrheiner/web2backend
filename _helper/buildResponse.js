@@ -23,6 +23,7 @@ async function buildPostResponse(data, authorInfo = true) {
   const author = (authorInfo ? await User.getUsernameById(userId) : undefined);
   const score = await Vote.getVoteCountPost(data._id);
   const type = data.type;
+  const link = data.link || undefined;
   let images;
   if (type === 'img') {
     images = await Image.getImageByPost(data._id);
@@ -40,6 +41,7 @@ async function buildPostResponse(data, authorInfo = true) {
     description: data.description,
     score: score,
     type: type,
+    link: link,
     images: images,
     createdAt: dayjs(createdAt).fromNow(),
     updatedAt: dayjs(updatedAt).fromNow(),

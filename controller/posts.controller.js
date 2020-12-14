@@ -27,12 +27,23 @@ function create(req, res) {
     });
     return;
   }
-  const post = new Post({
-    author: req.user.id,
-    title: req.body.title,
-    description: req.body.description,
-    type: req.body.type,
-  });
+  let post;
+  if (Object.prototype.hasOwnProperty.call(req.body, 'link')) {
+    post = new Post({
+      author: req.user.id,
+      title: req.body.title,
+      description: req.body.description,
+      type: req.body.type,
+      link: req.body.link,
+    });
+  } else {
+    post = new Post({
+      author: req.user.id,
+      title: req.body.title,
+      description: req.body.description,
+      type: req.body.type,
+    });
+  }
   post.save(post).then((data) => {
     res.status(200).send({id: data._id, title: data.title});
     for (const img of Object.entries(req.files)) {
@@ -42,7 +53,6 @@ function create(req, res) {
       });
       image.save(image).then((data) => {
         console.log(data);
-        console.log('image saved');
       }).catch((err) => {
         console.log(err);
       });
