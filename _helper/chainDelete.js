@@ -2,6 +2,7 @@ const Post = require('../models/post.model');
 const Comment = require('../models/comment.model');
 const Vote = require('../models/vote.model');
 const Image = require('../models/image.model');
+const Saved = require('../models/saved.model');
 const fs = require('fs');
 
 module.exports = {
@@ -24,6 +25,7 @@ async function deleteUserChildren(userId) {
 
   fs.unlinkSync(`public/avatars/${userId}.png`);
   return {
+    saves: await Saved.deleteByUser(userId),
     posts: await Post.deleteByUser(userId),
     comments: await Comment.deleteByUser(userId),
     likes: await Vote.deleteByUser(userId),
@@ -37,6 +39,7 @@ async function deletePostChildren(postId) {
     fs.unlinkSync(`public/assets/${name}`);
   });
   return {
+    saves: await Saved.deleteByPost(postId),
     images: await Image.deleteByPost(postId),
     comments: await Comment.deleteByPost(postId),
     likes: await Vote.deleteByPost(postId),
