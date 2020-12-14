@@ -136,18 +136,29 @@ async function updateSelf(req, res) {
   }
   const id = req.user.id;
   const updatedUser = {};
-  if (Object.prototype.hasOwnProperty.call(req.body, 'username')) {
-    if (await User.exists({username: req.body.username})) {
+  if (Object.prototype.hasOwnProperty.call(req.body, 'editUsername')) {
+    if (await User.exists({username: req.body.editUsername})) {
       res.status(400).send({error: true, message: 'Username already exists!'});
       return;
+    } else {
+      updatedUser.username = req.body.editUsername;
     }
-    updatedUser.username = req.body.username;
   }
-  if (Object.prototype.hasOwnProperty.call(req.body, 'status')) {
-    updatedUser.status = req.body.status;
+  if (Object.prototype.hasOwnProperty.call(req.body, 'resetAvatar')) {
+    if (req.body.resetAvatar === 'on') {
+      if (Object.prototype.hasOwnProperty.call(updatedUser, 'username')) {
+        avatar.buildAndSaveAvatar(id, updatedUser.username);
+      } else {
+        const userInfo = await User.getUsernameById(req.user.id);
+        avatar.buildAndSaveAvatar(id, userInfo.username);
+      }
+    }
   }
-  if (Object.prototype.hasOwnProperty.call(req.body, 'password')) {
-    updatedUser.hash = bcrypt.hashSync(req.body.password, 10);
+  if (Object.prototype.hasOwnProperty.call(req.body, 'editStatus')) {
+    updatedUser.status = req.body.editStatus;
+  }
+  if (Object.prototype.hasOwnProperty.call(req.body, 'editPassword')) {
+    updatedUser.hash = bcrypt.hashSync(req.body.editPassword, 10);
   }
   console.log(updatedUser);
   User.findByIdAndUpdate(id, {
@@ -163,6 +174,9 @@ async function updateSelf(req, res) {
     } else {
       buildResponse.buildUserResponse(data).then((data) => {
         res.status(200).send(data);
+        if (Object.keys(req.files).length !== 0) {
+          avatar.saveCustomAvatar(id, req.files['customAvatar'][0].buffer);
+        }
       });
     }
   }).catch((err) => {

@@ -51,15 +51,19 @@ const UpdateUserReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   type: 'object',
   properties: {
-    username: usernameProperties,
-    password: passwordProperties,
-    status: {
+    editUsername: usernameProperties,
+    editPassword: passwordProperties,
+    editStatus: {
       type: 'string',
       maxLength: 150,
     },
+    resetAvatar: {
+      'type': 'string',
+      'enum': ['on', 'off'],
+    },
   },
   required: [
-    'status',
+    'editStatus',
   ],
 };
 
