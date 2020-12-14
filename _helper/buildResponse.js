@@ -46,6 +46,8 @@ async function buildPostResponse(data, authorInfo = true) {
     images: images,
     createdAt: dayjs(createdAt).fromNow(),
     updatedAt: dayjs(updatedAt).fromNow(),
+    createdAtUnix: dayjs(createdAt).unix(),
+    updatedAtUnix: dayjs(updatedAt).unix(),
   };
 }
 
@@ -148,5 +150,7 @@ async function getSavedResponseItem(id) {
     author: author,
     createdAt: dayjs(post.createdAt).fromNow(),
     updatedAt: dayjs(post.updatedAt).fromNow(),
+    createdAtUnix: dayjs(post.createdAt).unix(),
+    updatedAtUnix: dayjs(post.updatedAt).unix(),
   };
 }
