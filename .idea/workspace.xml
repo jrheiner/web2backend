@@ -23,24 +23,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="22142bf9-6238-4fc9-b23e-bebc275145aa" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/_helper/saveImagePost.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/image.model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_helper/buildAvatar.js" beforeDir="false" afterPath="$PROJECT_DIR$/_helper/buildAvatar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_helper/buildResponse.js" beforeDir="false" afterPath="$PROJECT_DIR$/_helper/buildResponse.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_helper/reqValidationSchemes.js" beforeDir="false" afterPath="$PROJECT_DIR$/_helper/reqValidationSchemes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/posts.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/posts.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulpfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/gulpfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/post.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/post.model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/3rdpartylicenses.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/main.f404d642ff48911291ef.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/polyfills.9bf4dad123bd95dda86e.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/runtime.359d5ee4682f20e936e9.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/scripts.a73844de5f291be94c3b.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/styles.3b94b19382624e6b9362.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/34b5c00d-c48b-4300-b2d6-76e03eaaf0ad.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +67,7 @@
     <property name="javascript.nodejs.core.library.typings.version" value="14.10.1" />
     <property name="js.buildTools.gulp.gulp_package_dir" value="$PROJECT_DIR$/node_modules/gulp" />
     <property name="js.linters.configure.manually.selectedeslint" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/config" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -94,11 +81,13 @@
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.2.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Jonas\Desktop\3. Semester\Web Engineering 2\Project Directory\Working\BackEnd\config" />
+    </key>
+  </component>
   <component name="RunManager" selected="Node.js.bin\www">
-    <configuration name="buildAvatar.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/_helper/buildAvatar.js" working-dir="$PROJECT_DIR$/_helper">
-      <method v="2" />
-    </configuration>
-    <configuration name="testimg.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/_helper/testimg.js" working-dir="$PROJECT_DIR$/_helper">
+    <configuration name="test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/_helper/test.js" working-dir="$PROJECT_DIR$/_helper">
       <method v="2" />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp">
@@ -130,10 +119,15 @@
       <envs />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Node.js.bin\www" />
+      <item itemvalue="Node.js.test.js" />
+      <item itemvalue="npm.start" />
+      <item itemvalue="npm.test" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Node.js.testimg.js" />
-        <item itemvalue="Node.js.buildAvatar.js" />
+        <item itemvalue="Node.js.test.js" />
         <item itemvalue="npm.test" />
         <item itemvalue="npm.start" />
       </list>
@@ -168,7 +162,8 @@
       <workItem from="1607338499319" duration="29139000" />
       <workItem from="1607618304619" duration="6092000" />
       <workItem from="1607704263314" duration="6146000" />
-      <workItem from="1607766292943" duration="21999000" />
+      <workItem from="1607766292943" duration="47581000" />
+      <workItem from="1607898686630" duration="3138000" />
     </task>
     <servers />
   </component>

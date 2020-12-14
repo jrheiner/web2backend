@@ -1,0 +1,18 @@
+{
+  "logging": {
+    "namespace": "backend:server",
+    "format": "dev"
+  },
+  "mongo": {
+    "protocol": "mongodb+srv",
+    "user": "",
+    "password": "",
+    "url": "",
+    "db": "",
+    "options": "retryWrites=true&w=majority"
+  },
+  "jwt": "jwt-dev",
+  "jwt_expiresIn": "1d",
+  "jwt_audience": "localhost",
+  "jwt_issuer": "backend-dev"
+}

@@ -117,5 +117,4 @@ dist
 
 # Config file
 config/config.json
-/config/
 .idea/workspace.xml
