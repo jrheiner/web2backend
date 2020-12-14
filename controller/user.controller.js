@@ -136,16 +136,19 @@ async function updateSelf(req, res) {
   }
   const id = req.user.id;
   const updatedUser = {};
+  let usernameChanged = false;
   if (Object.prototype.hasOwnProperty.call(req.body, 'editUsername')) {
     if (await User.exists({username: req.body.editUsername})) {
       res.status(400).send({error: true, message: 'Username already exists!'});
       return;
     } else {
       updatedUser.username = req.body.editUsername;
+      usernameChanged = true;
     }
   }
-  if (Object.prototype.hasOwnProperty.call(req.body, 'resetAvatar')) {
-    if (req.body.resetAvatar === 'on') {
+  if (Object.prototype.hasOwnProperty.call(req.body, 'resetAvatar') ||
+    usernameChanged) {
+    if (req.body.resetAvatar === 'on' || usernameChanged) {
       if (Object.prototype.hasOwnProperty.call(updatedUser, 'username')) {
         avatar.buildAndSaveAvatar(id, updatedUser.username);
       } else {
