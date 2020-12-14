@@ -12,6 +12,9 @@ router.post('/register', userController.register);
 router.post('/login', userController.login);
 router.get('/', auth, userController.findSelf);
 router.get('/check/:username', userController.check);
+router.get('/saved', auth, userController.findSaved);
+router.get('/saved/:id', auth, userController.checkSaved);
+router.post('/save/:id', auth, userController.savePost);
 router.get('/:id', userController.findOne);
 router.put('/', auth, upload.fields([
   {name: 'customAvatar', maxCount: 1},

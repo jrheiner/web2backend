@@ -3,6 +3,7 @@ const Post = require('../models/post.model');
 const Vote = require('../models/vote.model');
 const Image = require('../models/image.model');
 const Comment = require('../models/comment.model');
+const Saved = require('../models/saved.model');
 const dayjs = require('dayjs');
 const relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
@@ -15,9 +16,9 @@ module.exports = {
   buildUserResponse,
   buildLoginResponse,
   buildRegisterResponse,
+  buildSavedResponse,
 };
 
-// TODO validation/schema of json before sending back?
 async function buildPostResponse(data, authorInfo = true) {
   const userId = data.author;
   const author = (authorInfo ? await User.getUsernameById(userId) : undefined);
@@ -118,5 +119,34 @@ function buildRegisterResponse(data) {
   return {
     id: data._id,
     username: data.username,
+  };
+}
+
+async function buildSavedResponse(userId) {
+  const savedPosts = await Saved.getPostsByUser(userId);
+  const response = [];
+  for (const saved of savedPosts) {
+    response.push(
+        {
+          post: await getSavedResponseItem(saved.post),
+          saved: dayjs(saved.createdAt).fromNow(),
+        },
+    );
+  }
+  return response;
+}
+
+async function getSavedResponseItem(id) {
+  const post = await Post.findById(id);
+  const userId = post.author;
+  const author = await User.getUsernameById(userId);
+
+  return {
+    id: id,
+    title: post.title,
+    description: post.description,
+    author: author,
+    createdAt: dayjs(post.createdAt).fromNow(),
+    updatedAt: dayjs(post.updatedAt).fromNow(),
   };
 }

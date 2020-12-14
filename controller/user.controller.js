@@ -8,6 +8,8 @@ const avatar = require('../_helper/buildAvatar');
 const errorMessages = require('../_helper/errorMessages');
 const chainDelete = require('../_helper/chainDelete');
 const mongoose = require('mongoose');
+const Post = require('../models/post.model');
+const Saved = require('../models/saved.model');
 
 module.exports = {
   register,
@@ -17,6 +19,9 @@ module.exports = {
   findOne,
   updateSelf,
   deleteSelf,
+  findSaved,
+  savePost,
+  checkSaved,
 };
 
 async function register(req, res) {
@@ -215,4 +220,57 @@ function deleteSelf(req, res) {
         },
     );
   });
+}
+
+function findSaved(req, res) {
+  buildResponse.buildSavedResponse(req.user.id).then((data) => {
+    res.status(200).send(data);
+  });
+}
+
+async function savePost(req, res) {
+  const postId = req.params.id;
+  const userId = req.user.id;
+  if (await checkValidPost(postId)) return;
+  if (await Saved.exists({user: userId, post: postId})) {
+    await Saved.deleteOne({user: userId, post: postId});
+    res.sendStatus(204);
+  } else {
+    const saved = new Saved({
+      user: userId,
+      post: postId,
+    });
+    saved.save(saved).then((data) => {
+      res.status(200).send({id: data._id});
+    }).catch((err) => {
+      console.log(err);
+      res.status(500).send({error: true, message: 'Error saving post!'});
+    });
+  }
+}
+
+async function checkSaved(req, res) {
+  const postId = req.params.id;
+  const userId = req.user.id;
+  if (await checkValidPost(postId)) return;
+  if (await Saved.exists({user: userId, post: postId})) {
+    res.status(200).send({saved: true});
+  } else {
+    res.status(200).send({saved: false});
+  }
+}
+
+async function checkValidPost(postId, res) {
+  if (!mongoose.isValidObjectId(postId)) {
+    res.status(404).send(
+        {error: true, message: `${postId} is not a valid post id!`},
+    );
+    return false;
+  }
+  if (!await Post.exists({_id: postId})) {
+    res.status(404).send(
+        {error: true, message: `Post ${postId} not found!`},
+    );
+    return false;
+  }
 }
