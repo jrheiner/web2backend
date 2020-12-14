@@ -11,8 +11,10 @@
     "db": "",
     "options": "retryWrites=true&w=majority"
   },
-  "jwt": "jwt-dev",
-  "jwt_expiresIn": "1d",
-  "jwt_audience": "localhost",
-  "jwt_issuer": "backend-dev"
+  "jwt": {
+    "secret": "jwt-dev",
+    "expiresIn": "1d",
+    "audience": "localhost",
+    "issuer": "backend-dev"
+  }
 }

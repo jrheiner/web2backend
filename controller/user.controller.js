@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const v = require('../_helper/reqValidation');
 const buildResponse = require('../_helper/buildResponse');
-const config = require('../config/config.json');
+const jwtConfig = require('../config/config.json').jwt;
 const avatar = require('../_helper/buildAvatar');
 const errorMessages = require('../_helper/errorMessages');
 const chainDelete = require('../_helper/chainDelete');
@@ -63,11 +63,11 @@ async function login(req, res) {
     const token = jwt.sign({
       id: user._id,
     },
-    config.jwt,
+    jwtConfig.secret,
     {
-      expiresIn: config.jwt_expiresIn,
-      audience: config.jwt_audience,
-      issuer: config.jwt_issuer,
+      expiresIn: jwtConfig.expiresIn,
+      audience: jwtConfig.audience,
+      issuer: jwtConfig.issuer,
     });
     const data = {
       ...user.toJSON(),

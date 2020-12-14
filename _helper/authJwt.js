@@ -1,15 +1,15 @@
 const jwt = require('express-jwt');
-const config = require('../config/config.json');
+const jwtConfig = require('../config/config.json').jwt;
 const User = require('../models/user.model');
 
 // See Claims https://tools.ietf.org/html/rfc7519#section-4.1.3
 
 const jwtAuth = jwt({
-  secret: config.jwt,
+  secret: jwtConfig.secret,
   algorithms: ['HS256'],
   isRevoked: isRevoked,
-  audience: config.jwt_audience,
-  issuer: config.jwt_issuer,
+  audience: jwtConfig.audience,
+  issuer: jwtConfig.issuer,
 });
 
 // revoke token if user was deleted while logged in
