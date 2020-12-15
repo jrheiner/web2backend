@@ -3,20 +3,30 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
-const mConfig = require('./config/config.json').mongo;
-const lConfig = require('./config/config.json').logging;
 const compression = require('compression');
+const debug = require('debug')('backend:server');
+
+let dbConfig;
+let logConfig;
+
+try {
+  dbConfig = require('./config/config.json').mongo;
+  logConfig = require('./config/config.json').logging;
+} catch (err) {
+  debug('Config \'./config/config.json\' not found.');
+  debug('Check the ReadMe.md for instructions.');
+  process.exit(0);
+}
+
 const postRouter = require('./routes/posts.routes');
 const commentRouter = require('./routes/comments.routes');
 const userRouter = require('./routes/user.routes');
 const projectStats = require('./_helper/projectStats');
 
-const debug = require('debug')(lConfig.namespace);
-
 const app = express();
 
 // TODO logger format tiny or combined
-app.use(logger(lConfig.format, {
+app.use(logger(logConfig.format, {
   stream: {
     write: (msg) => debug(msg.trimEnd()),
   },
@@ -64,25 +74,26 @@ const mongooseOptions = {
   useFindAndModify: false,
 };
 
-const dbUri = `${mConfig.protocol}://${mConfig.user}:${mConfig.password}@${mConfig.url}/${mConfig.db}?${mConfig.options}`;
+const dbUri = `${dbConfig.protocol}://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.db}?${dbConfig.options}`;
 mongoose.connect(dbUri, mongooseOptions)
     .then(() => {
-      debug(`Connected to the database ${mConfig.db} [${mConfig.url}]`);
+      debug(`Connected to the database ${dbConfig.db} [${dbConfig.host}]`);
     })
     .catch((err) => {
-      debug(`Failed to connect to ${mConfig.db}! Error:\n${err}`);
+      debug(`Failed to connect to ${dbConfig.db}!\n${err}`);
       process.exit(0);
     });
 
 mongoose.connection.on('error', (err) => {
   debug(
-      `Connection to database ${mConfig.db} [${mConfig.url}] errored:\n${err}`);
+      `Connection to database ${dbConfig.db} [${dbConfig.host}] errored:\n
+      ${err}`);
 });
 
 process.on('SIGINT', () => {
   mongoose.connection.close(() => {
     debug(
-        `Connection to database ${mConfig.db} [${mConfig.url}] disconnected`);
+        `Connection to database ${dbConfig.db} [${dbConfig.host}] disconnected`);
     process.exit(0);
   });
 });

@@ -1,13 +1,12 @@
 {
   "logging": {
-    "namespace": "backend:server",
     "format": "dev"
   },
   "mongo": {
     "protocol": "mongodb+srv",
     "user": "",
     "password": "",
-    "url": "",
+    "host": "",
     "db": "",
     "options": "retryWrites=true&w=majority"
   },
