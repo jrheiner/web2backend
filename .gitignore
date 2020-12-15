@@ -118,6 +118,9 @@ dist
 # Config file
 config/config.json
 
+# production build
+/dist
+
 # IDEs and editors
 /.idea
 .project

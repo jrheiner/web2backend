@@ -59,10 +59,20 @@ function findAll(req, res) {
       });
     }).catch((err) => {
       console.log(err);
-      res.status(500).send({error: true, message: `Error getting comment for post ${id}!`});
+      res.status(500).send(
+          {
+            error: true,
+            message: `Error getting comment for post ${id}!`,
+          },
+      );
     });
   } else {
-    res.status(404).send({error: true, message: `${id} is an invalid post id!`});
+    res.status(404).send(
+        {
+          error: true,
+          message: `${id} is an invalid post id!`,
+        },
+    );
   }
 }
 
@@ -70,7 +80,12 @@ function findOne(req, res) {
   const id = req.params.id;
   Comment.findById(id).then((data) => {
     if (!data) {
-      res.status(404).send({error: true, message: `Comment with id ${id} not found`});
+      res.status(404).send(
+          {
+            error: true,
+            message: `Comment with id ${id} not found`,
+          },
+      );
     } else {
       buildResponse.buildCommentResponse(data).then((data) => {
         res.status(200).send(data);
@@ -78,7 +93,12 @@ function findOne(req, res) {
     }
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({error: true, message: `Error getting comment with id ${id}!`});
+    res.status(500).send(
+        {
+          error: true,
+          message: `Error getting comment with id ${id}!`,
+        },
+    );
   });
 }
 
@@ -86,16 +106,28 @@ async function checkPrivileges(userId, commentId, res) {
   if (mongoose.isValidObjectId(commentId)) {
     const commentToEdit = await Comment.findById(commentId);
     if (!commentToEdit) {
-      res.status(404).send({error: true, message: `Comment with id ${commentId} not found!`});
+      res.status(404).send(
+          {
+            error: true, message: `Comment with id ${commentId} not found!`,
+          },
+      );
       return false;
     } else if (commentToEdit.author.toString() === userId.toString()) {
       return true;
     } else {
-      res.status(401).send({error: true, message: errorMessages.invalidPrivileges});
+      res.status(401).send(
+          {
+            error: true, message: errorMessages.invalidPrivileges,
+          },
+      );
       return false;
     }
   } else {
-    res.status(404).send({error: true, message: `${commentId} is an invalid comment id!`});
+    res.status(404).send(
+        {
+          error: true, message: `${commentId} is an invalid comment id!`,
+        },
+    );
   }
 }
 
@@ -116,7 +148,12 @@ async function updateOne(req, res) {
   }
   Comment.findByIdAndUpdate(commentId, req.body, {new: true}).then((data) => {
     if (!data) {
-      res.status(404).send({error: true, message: `Error updating comment with id ${commentId}! Comment not found!`});
+      res.status(404)
+          .send({
+            error: true,
+            message: `Error updating comment with id ${commentId}!
+             Comment not found!`,
+          });
     } else {
       buildResponse.buildCommentResponse(data).then((data) => {
         res.status(200).send({description: data.description});
@@ -124,7 +161,12 @@ async function updateOne(req, res) {
     }
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({error: true, message: `Error updating comment with id ${commentId}!`});
+    res.status(500).send(
+        {
+          error: true,
+          message: `Error updating comment with id ${commentId}!`,
+        },
+    );
   });
 }
 
@@ -136,12 +178,23 @@ async function deleteOne(req, res) {
   }
   Comment.findByIdAndDelete(commentId).then((data) => {
     if (!data) {
-      res.status(404).send({error: true, message: `Error deleting comment with id ${commentId}! Comment not found!`});
+      res.status(404).send(
+          {
+            error: true,
+            message: `Error deleting comment with id ${commentId}!
+             Comment not found!`,
+          },
+      );
     } else {
       res.sendStatus(204);
     }
   }).catch((err) => {
     console.log(err);
-    res.status(500).send({error: true, message: `Error deleting comment with id ${commentId}!`});
+    res.status(500).send(
+        {
+          error: true,
+          message: `Error deleting comment with id ${commentId}!`,
+        },
+    );
   });
 }

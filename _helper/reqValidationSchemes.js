@@ -16,7 +16,8 @@ const passwordProperties = {
   type: 'string',
   minLength: 5,
   maxLength: 32,
-  pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,32}$',
+  pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)' +
+    '(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,32}$',
 
 };
 

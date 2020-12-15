@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../_helper/authJwt');
-const router = express.Router();
+const router = new express.Router();
 
 const commentController = require('../controller/comments.controller');
 

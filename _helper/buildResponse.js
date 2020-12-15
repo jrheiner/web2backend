@@ -99,8 +99,12 @@ async function buildUserResponse(data) {
   };
 
   const userActivity = {
-    posts: await buildPostResponseMultiple(await Post.findManyByUser(userId), false),
-    comments: await buildCommentResponseMultiple(await Comment.findManyByUser(userId), false),
+    posts:
+      await buildPostResponseMultiple(
+          await Post.findManyByUser(userId), false),
+    comments:
+      await buildCommentResponseMultiple(
+          await Comment.findManyByUser(userId), false),
   };
 
   return {
