@@ -1,5 +1,4 @@
 const jdenticon = require('jdenticon');
-const sharp = require('sharp');
 const cloudinary = require('cloudinary').v2;
 const cloudConfig = require('../config/config.json').cloudinary;
 
@@ -38,16 +37,14 @@ function buildAndSaveAvatar(userId, username, size = 500) {
   //  if (err) return console.log(err);
   // });
 }
-
-function saveCustomAvatar(userId, buffer, size=500) {
+/*unction saveCustomAvatar(userId, buffer, size=500) {
   sharp(buffer)
       .resize(size)
       .toFile(`public/avatars/${userId}.png`, (err) => {
         if (err) return console.log(err);
       });
-}
+}*/
 
 module.exports = {
   buildAndSaveAvatar,
-  saveCustomAvatar,
 };
