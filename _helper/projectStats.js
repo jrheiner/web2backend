@@ -70,18 +70,19 @@ module.exports = function projectStats(req, res) {
 
 function getDirFileSize(dir, callback) {
   fs.readdir(dir, function(err, files) {
+    const stats = {
+      storageSize: 0,
+    };
     if (err) {
-      console.log(err);
+      stats.storageSize = 0;
     } else {
       let fileSize = 0;
       files.forEach(function(file) {
         fileSize += fs.statSync(dir+file).size;
       });
-      const stats = {
-        storageSize: fileSize,
-      };
-      callback(err, stats);
+      stats.storageSize = fileSize;
     }
+    callback(null, stats);
   });
 }
 
