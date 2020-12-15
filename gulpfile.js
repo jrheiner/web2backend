@@ -6,44 +6,14 @@ const del = require('del');
 const webpack = require('webpack-stream');
 const exec = require('child_process').exec;
 
-
-function checkDevDirStructure(cb) {
-  const dirs = ['public/avatars', 'public/assets'];
-  log(' # Required directories: '+dirs.toString());
-  dirs.forEach((dir) => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-      log(` ✓ Created required directory ${dir}`);
-    } else {
-      log(` ✓ Found required directory ${dir}`);
-    }
-  });
-  cb();
-}
-
-function checkProdDirStructure(cb) {
-  const dirs = [
-    'dist',
-    'dist/public/',
-    'dist/public/avatars',
-    'dist/public/assets',
-  ];
-  log(' # Required directories: '+dirs.toString());
-  dirs.forEach((dir) => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-      log(` ✓ Created required directory ${dir}`);
-    } else {
-      log(` ✓ Found required directory ${dir}`);
-    }
-  });
-  cb();
-}
-
 function checkConfig(cb) {
   const path = 'config/config.json';
   const example = 'config/config.example.json';
   log(' # Searching for config file...');
+  if (!fs.existsSync('config')) {
+    log(` ✓ Created config directory`);
+    fs.mkdirSync('config');
+  }
   if (!fs.existsSync(path)) {
     if (fs.existsSync(example)) {
       fs.copyFileSync(example, path);
@@ -70,7 +40,7 @@ function buildAngularCodeTask(cb) {
 }
 
 function copyAngularCodeTask() {
-  log(' # Copying Angular production files');
+  log(' # Copying Angular production files...');
   return src('../FrontEnd/dist/FrontEnd/**')
       .pipe(dest('dist/public'));
 }
@@ -110,19 +80,22 @@ function bundle(cb) {
       });
 }
 
-const build = parallel(
-    checkProdDirStructure,
-    buildAngularCodeTask,
-    bundle,
+const build = parallel(buildAngularCodeTask, bundle);
+const prod = series(
+    checkConfig,
+    runLinter,
+    runTests,
+    clean,
+    build,
+    copyAngularCodeTask,
 );
-const prod = series(runLinter, runTests, clean, build, copyAngularCodeTask);
 
 exports.test = runTests;
 exports.lint = runLinter;
 exports.default = prod;
 exports.prod = prod;
 exports.dev = series(
-    checkDevDirStructure,
     checkConfig,
     runLinter,
+    runTests,
 );

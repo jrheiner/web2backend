@@ -48,7 +48,7 @@ function create(req, res) {
     res.status(200).send({id: data._id, title: data.title});
     for (const img of Object.entries(req.files)) {
       const image = new Image({
-        name: img[1][0].filename,
+        name: img[1][0].path,
         post: data._id,
       });
       image.save(image).then((data) => {

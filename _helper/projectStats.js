@@ -5,7 +5,6 @@ const Vote = require('../models/vote.model');
 const Image = require('../models/image.model');
 const Comment = require('../models/comment.model');
 const async = require('async');
-const fs = require('fs');
 
 module.exports = function projectStats(req, res) {
   async.parallel({
@@ -57,32 +56,9 @@ module.exports = function projectStats(req, res) {
         callback(null, stats);
       });
     },
-    disk_assets: function(callback) {
-      getDirFileSize('./public/assets/', callback);
-    },
-    disk_avatars: function(callback) {
-      getDirFileSize('./public/avatars/', callback);
-    },
   }, function(err, results) {
     res.send(err || results);
   });
 };
 
-function getDirFileSize(dir, callback) {
-  fs.readdir(dir, function(err, files) {
-    const stats = {
-      storageSize: 0,
-    };
-    if (err) {
-      stats.storageSize = 0;
-    } else {
-      let fileSize = 0;
-      files.forEach(function(file) {
-        fileSize += fs.statSync(dir+file).size;
-      });
-      stats.storageSize = fileSize;
-    }
-    callback(null, stats);
-  });
-}
 

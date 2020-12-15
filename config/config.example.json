@@ -5,6 +5,11 @@
   "logging": {
     "format": "dev"
   },
+  "cloudinary": {
+    "cloud_name": "",
+    "api_key": "",
+    "api_secret": ""
+  },
   "mongo": {
     "protocol": "mongodb+srv",
     "user": "",

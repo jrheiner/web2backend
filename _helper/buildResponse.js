@@ -21,7 +21,8 @@ module.exports = {
 
 async function buildPostResponse(data, authorInfo = true) {
   const userId = data.author;
-  const author = (authorInfo ? await User.getUsernameById(userId) : undefined);
+  const author = (authorInfo ?
+    await User.getUserAndAvatarById(userId) : undefined);
   const score = await Vote.getVoteCountPost(data._id);
   const type = data.type;
   const link = data.link || undefined;
@@ -61,7 +62,8 @@ async function buildPostResponseMultiple(data, authorInfo = true) {
 
 async function buildCommentResponse(data, authorInfo = true) {
   const userId = data.author;
-  const author = (authorInfo ? await User.getUsernameById(userId) : undefined);
+  const author = (authorInfo ?
+    await User.getUserAndAvatarById(userId) : undefined);
   const createdAt = data.createdAt;
   const updatedAt = data.updatedAt;
 
@@ -95,6 +97,7 @@ async function buildUserResponse(data) {
     username: data.username,
     score: score,
     status: data.status,
+    avatar: data.avatar,
     createdAt: dayjs(createdAt).fromNow(),
   };
 

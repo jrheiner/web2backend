@@ -15,12 +15,24 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  avatar: {
+    type: String,
+    default: 'https://via.placeholder.com/500',
+  },
 }, {
   timestamps: true,
 });
 
 UserSchema.static('getUsernameById', function(userId) {
   return this.findById(userId, 'username');
+});
+
+UserSchema.static('updateAvatarUrl', function(userId, avatarUrl) {
+  return this.update({_id: userId}, {$set: {avatar: avatarUrl}});
+});
+
+UserSchema.static('getUserAndAvatarById', function(userId) {
+  return this.findById(userId, 'username avatar');
 });
 
 module.exports = mongoose.model('User', UserSchema);

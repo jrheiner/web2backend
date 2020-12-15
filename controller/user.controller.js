@@ -39,12 +39,21 @@ async function register(req, res) {
     return;
   }
   const hash = bcrypt.hashSync(req.body.password, 10);
+
   const user = new User({
     username: req.body.username,
     hash: hash,
   });
   user.save(user).then((data) => {
-    avatar.buildAndSaveAvatar(data._id, data.username);
+    avatar.buildAndSaveAvatar(data._id, data.username).then((upload)=> {
+      User.updateOne({_id: data._id},
+          {avatar: upload.secure_url}, (err, res) => {
+            if (err !== null) {
+              console.log('Error updating avatar url');
+              console.log(err);
+            }
+          });
+    });
     res.status(200).send(buildResponse.buildRegisterResponse(data));
   }).catch((err) => {
     console.log(err);
@@ -168,6 +177,9 @@ async function updateSelf(req, res) {
   if (Object.prototype.hasOwnProperty.call(req.body, 'editPassword')) {
     updatedUser.hash = bcrypt.hashSync(req.body.editPassword, 10);
   }
+  if (Object.keys(req.files).length !== 0) {
+    updatedUser.avatar = req.files['customAvatar'][0].path;
+  }
   console.log(updatedUser);
   User.findByIdAndUpdate(id, {
     $set: updatedUser,
@@ -182,9 +194,6 @@ async function updateSelf(req, res) {
     } else {
       buildResponse.buildUserResponse(data).then((data) => {
         res.status(200).send(data);
-        if (Object.keys(req.files).length !== 0) {
-          avatar.saveCustomAvatar(id, req.files['customAvatar'][0].buffer);
-        }
       });
     }
   }).catch((err) => {

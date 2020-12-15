@@ -1,11 +1,29 @@
 const express = require('express');
+const multer = require('multer');
 const auth = require('../_helper/authJwt');
 const router = new express.Router();
-
 const userController = require('../controller/user.controller');
 
-const multer = require('multer');
-const storage = multer.memoryStorage();
+const cloudinary = require('cloudinary').v2;
+const cloudConfig = require('../config/config.json').cloudinary;
+const {CloudinaryStorage} = require('multer-storage-cloudinary');
+
+cloudinary.config({
+  cloud_name: cloudConfig.cloud_name,
+  api_key: cloudConfig.api_key,
+  api_secret: cloudConfig.api_secret,
+});
+
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    format: 'png',
+    overwrite: true,
+    public_id: (req, file) => req.user.id,
+  },
+});
+
 const upload = multer({storage: storage});
 
 router.post('/register', userController.register);
