@@ -24,6 +24,10 @@ CommentSchema.static('findManyByUser', function(userId) {
   return this.find({author: userId});
 });
 
+CommentSchema.static('countByPost', function(postId) {
+  return this.countDocuments({parent: postId});
+});
+
 CommentSchema.static('deleteByPost', function(postId) {
   return this.deleteMany({parent: postId});
 });

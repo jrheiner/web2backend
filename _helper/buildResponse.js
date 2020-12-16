@@ -35,6 +35,7 @@ async function buildPostResponse(data, authorInfo = true) {
   }
   const createdAt = data.createdAt;
   const updatedAt = data.updatedAt;
+  const commentCount = await Comment.countByPost(data._id);
 
   return {
     id: data._id,
@@ -42,6 +43,7 @@ async function buildPostResponse(data, authorInfo = true) {
     title: data.title,
     description: data.description,
     score: score,
+    commentCount: commentCount,
     type: type,
     link: link,
     images: images,
