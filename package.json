@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./app.js",
-    "test": "mocha",
+    "start": "node ./bin/run.js",
+    "test": "mocha app.test.js --timeout 5000",
     "lint": "eslint . --ext .js",
     "dev": "gulp dev",
     "prod": "gulp prod"
@@ -30,6 +30,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "del": "^6.0.0",
     "eslint": "^7.13.0",
     "eslint-config-google": "^0.14.0",
@@ -40,11 +42,6 @@
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
     "gulp-mocha": "^7.0.2",
-    "gulp-zip": "^5.0.2",
-    "mocha": "^8.2.1",
-    "webpack-cli": "^4.2.0",
-    "webpack-node-externals": "^2.5.2",
-    "webpack-stream": "^6.1.1",
-    "webpack": "^5.10.2"
+    "mocha": "^8.2.1"
   }
 }

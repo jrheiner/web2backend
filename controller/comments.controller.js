@@ -67,7 +67,7 @@ function findAll(req, res) {
       );
     });
   } else {
-    res.status(404).send(
+    res.status(400).send(
         {
           error: true,
           message: `${id} is an invalid post id!`,
@@ -78,6 +78,15 @@ function findAll(req, res) {
 
 function findOne(req, res) {
   const id = req.params.id;
+  if (!mongoose.isValidObjectId(id)) {
+    res.status(400).send(
+        {
+          error: true,
+          message: `${id} is an invalid post id!`,
+        },
+    );
+    return;
+  }
   Comment.findById(id).then((data) => {
     if (!data) {
       res.status(404).send(

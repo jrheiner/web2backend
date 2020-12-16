@@ -4,15 +4,12 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const compression = require('compression');
-const http = require('http');
 const debug = require('debug')('backend:server');
 
 let dbConfig;
 let logConfig;
-let appConfig;
 
 try {
-  appConfig = require('./config/config.json').app;
   dbConfig = require('./config/config.json').mongo;
   logConfig = require('./config/config.json').logging;
 } catch (err) {
@@ -36,17 +33,10 @@ const app = express();
 app.use(logger(logConfig.format, {
   stream: {
     write: (msg) => {
-      (process.env.DEBUG ? debug(msg.trimEnd()) : console.log(msg));
+      (process.env.DEBUG ? debug(msg.trimEnd()) : console.log(msg.trimEnd()));
     },
   },
 }));
-const csp = {
-  ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-  'img-src': ['\'self\'', 'https://res.cloudinary.com/', 'data:'],
-  'script-src-attr': ['\'self\'', '\'unsafe-inline\''],
-};
-console.log(csp);
-// todo find working config
 app.use(helmet({
   contentSecurityPolicy: false,
 }));
@@ -135,50 +125,11 @@ process.on('SIGINT', () => {
   });
 });
 
-const port = appConfig.port;
-app.set('port', port);
-const server = http.createServer(app);
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
 
-function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-
-  const bind = typeof port === 'string' ?
-    'Pipe ' + port :
-    'Port ' + port;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      break;
-    default:
-      throw error;
-  }
-  process.exit(1);
-}
-
-function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string' ?
-    'pipe ' + addr :
-    'port ' + addr.port;
-  debug('Listening on ' + bind);
-  if (!process.env.DEBUG) {
-    if (port === 80) {
-      console.log('Serving app on app.localhost');
-    } else {
-      console.log('Serving app on localhost:'+port);
-    }
-  }
-}
+module.exports = {
+  app,
+  mongoose,
+};
 
 /*
 app.listen(appConfig.port, () => {

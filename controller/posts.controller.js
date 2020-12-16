@@ -77,7 +77,7 @@ function findAll(req, res) {
 function findOne(req, res) {
   const id = req.params.id;
   if (!mongoose.isValidObjectId(id)) {
-    res.status(404).send(
+    res.status(400).send(
         {
           error: true, message: `${id} is not a valid post id!`,
         },

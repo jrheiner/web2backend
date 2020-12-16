@@ -40,13 +40,15 @@ async function deleteUserChildren(userId) {
 
 async function deleteImagesByPost(postId) {
   let images = await Image.getImageByPost(postId);
-  await Image.deleteByPost(postId);
-  images = images.map((e) => ((e.name.split('/')[7]).replace('.png', '')));
-  console.log(images);
-  await cloudinary.api.delete_resources(images,
-      function(error, result) {
-        console.log(result, error);
-      });
+  if (await Image.exists({post: postId})) {
+    await Image.deleteByPost(postId);
+    images = images.map((e) => ((e.name.split('/')[7]).replace('.png', '')));
+    console.log(images);
+    await cloudinary.api.delete_resources(images,
+        function(error, result) {
+          console.log(result, error);
+        });
+  }
 }
 
 async function deletePostChildren(postId) {

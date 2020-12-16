@@ -1,4 +1,5 @@
 const {src, dest, series} = require('gulp');
+const mocha = require('gulp-mocha');
 const eslint = require('gulp-eslint');
 const log = require('fancy-log');
 const fs = require('fs');
@@ -57,9 +58,9 @@ function runLinter(cb) {
       });
 }
 
-function runTests(cb) {
-  log('runTests');
-  cb();
+function runTests() {
+  return src('app.test.js', {read: false})
+      .pipe(mocha({reporter: 'spec'}));
 }
 
 function clean() {
