@@ -1,9 +1,8 @@
-const {src, dest, series, parallel} = require('gulp');
+const {src, dest, series} = require('gulp');
 const eslint = require('gulp-eslint');
 const log = require('fancy-log');
 const fs = require('fs');
 const del = require('del');
-const webpack = require('webpack-stream');
 const exec = require('child_process').exec;
 
 function checkConfig(cb) {
@@ -29,7 +28,7 @@ function checkConfig(cb) {
   cb();
 }
 
-function buildAngularCodeTask(cb) {
+function buildAngularCode(cb) {
   log(' # Building Angular app...');
   return exec('cd ../FrontEnd && ng build --prod=true --base-href "/"',
       function(err, stdout, stderr) {
@@ -39,10 +38,10 @@ function buildAngularCodeTask(cb) {
       });
 }
 
-function copyAngularCodeTask() {
+function copyAngularCode() {
   log(' # Copying Angular production files...');
   return src('../FrontEnd/dist/FrontEnd/**')
-      .pipe(dest('dist/public'));
+      .pipe(dest('public'));
 }
 
 function runLinter(cb) {
@@ -65,29 +64,16 @@ function runTests(cb) {
 
 function clean() {
   log('Removing old build files...');
-  return del(['dist/**', '!dist/public/',
-    '!dist/public/avatars', '!dist/public/avatars/*.png',
-    '!dist/public/assets', '!dist/public/assets/*.png',
-  ],
-  {force: true});
+  return del(['public/**', '!public/index.api.html'], {force: true});
 }
 
-function bundle(cb) {
-  return src('app.js')
-      .pipe(webpack(require('./webpack.config.js')))
-      .pipe(dest('dist/')).on('end', function() {
-        cb();
-      });
-}
-
-const build = parallel(buildAngularCodeTask, bundle);
 const prod = series(
     checkConfig,
     runLinter,
     runTests,
     clean,
-    build,
-    copyAngularCodeTask,
+    buildAngularCode,
+    copyAngularCode,
 );
 
 exports.test = runTests;

@@ -16,8 +16,12 @@ try {
   dbConfig = require('./config/config.json').mongo;
   logConfig = require('./config/config.json').logging;
 } catch (err) {
-  debug('Config \'./config/config.json\' not found.');
-  debug('Check the ReadMe.md for instructions.');
+  if (process.env.DEBUG) {
+    debug('Config \'./config/config.json\' not found.');
+    debug('Check the ReadMe.md for instructions.');
+  } else {
+    console.log('Production build is missing a config file!');
+  }
   process.exit(0);
 }
 
@@ -31,10 +35,21 @@ const app = express();
 // TODO logger format tiny or combined
 app.use(logger(logConfig.format, {
   stream: {
-    write: (msg) => debug(msg.trimEnd()),
+    write: (msg) => {
+      (process.env.DEBUG ? debug(msg.trimEnd()) : console.log(msg));
+    },
   },
 }));
-app.use(helmet());
+const csp = {
+  ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+  'img-src': ['\'self\'', 'https://res.cloudinary.com/', 'data:'],
+  'script-src-attr': ['\'self\'', '\'unsafe-inline\''],
+};
+console.log(csp);
+// todo find working config
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -80,32 +95,49 @@ const mongooseOptions = {
 const dbUri = `${dbConfig.protocol}://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.db}?${dbConfig.options}`;
 mongoose.connect(dbUri, mongooseOptions)
     .then(() => {
-      debug(`Connected to the database ${dbConfig.db} [${dbConfig.host}]`);
+      if (process.env.DEBUG) {
+        debug(`Connected to the database ${dbConfig.db} [${dbConfig.host}]`);
+      } else {
+        console.log(
+            `Connected to the database ${dbConfig.db} [${dbConfig.host}]`);
+      }
     })
     .catch((err) => {
-      debug(`Failed to connect to ${dbConfig.db}!\n${err}`);
+      if (process.env.DEBUG) {
+        debug(`Failed to connect to ${dbConfig.db}!\n${err}`);
+      } else {
+        console.log(
+            `Failed to connect to ${dbConfig.db}!\n${err}`);
+      }
       process.exit(0);
     });
 
 mongoose.connection.on('error', (err) => {
-  debug(
-      `Connection to database ${dbConfig.db} [${dbConfig.host}] errored:\n
+  if (process.env.DEBUG) {
+    debug(
+        `Connection to database ${dbConfig.db} [${dbConfig.host}] errored:\n
       ${err}`);
+  } else {
+    console.log(
+        `Connection to database ${dbConfig.db} [${dbConfig.host}] errored:\n
+      ${err}`);
+  }
 });
 
 process.on('SIGINT', () => {
   mongoose.connection.close(() => {
-    debug(
-        `Connection to database ${dbConfig.db} [${dbConfig.host}] disconnected`,
-    );
+    if (process.env.DEBUG) {
+      debug(`Connection ${dbConfig.db} [${dbConfig.host}] disconnected`);
+    } else {
+      console.log(`Connection ${dbConfig.db} [${dbConfig.host}] disconnected`);
+    }
     process.exit(0);
   });
 });
 
-
-const server = http.createServer(app);
 const port = appConfig.port;
 app.set('port', port);
+const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

@@ -37,13 +37,13 @@ function buildAndSaveAvatar(userId, username, size = 500) {
   //  if (err) return console.log(err);
   // });
 }
-/*unction saveCustomAvatar(userId, buffer, size=500) {
+/* function saveCustomAvatar(userId, buffer, size=500) {
   sharp(buffer)
       .resize(size)
       .toFile(`public/avatars/${userId}.png`, (err) => {
         if (err) return console.log(err);
       });
-}*/
+} */
 
 module.exports = {
   buildAndSaveAvatar,
