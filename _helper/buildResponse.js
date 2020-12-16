@@ -76,6 +76,8 @@ async function buildCommentResponse(data, authorInfo = true) {
     description: data.description,
     createdAt: dayjs(createdAt).fromNow(),
     updatedAt: dayjs(updatedAt).fromNow(),
+    createdAtUnix: dayjs(createdAt).unix(),
+    updatedAtUnix: dayjs(updatedAt).unix(),
   };
 }
 
