@@ -137,3 +137,8 @@ config/config.json
 !.vscode/launch.json
 !.vscode/extensions.json
 .history/*
+
+# Documentation build
+/out
+/docs
+/docs/*

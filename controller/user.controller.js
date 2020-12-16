@@ -24,6 +24,13 @@ module.exports = {
   checkSaved,
 };
 
+/**
+ * Add new user to the database,
+ * build and upload the avatar based on the username
+ * @param {Request} req - Incoming request
+ * @param {Response} res - Response
+ * @return {Promise<void>} - Void
+ */
 async function register(req, res) {
   const reqValidity = v.validateRegisterReq(req.body);
   if (!reqValidity.valid) {

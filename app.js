@@ -114,6 +114,9 @@ mongoose.connection.on('error', (err) => {
   }
 });
 
+/**
+ * JSDoc test
+ */
 process.on('SIGINT', () => {
   mongoose.connection.close(() => {
     if (process.env.DEBUG) {
