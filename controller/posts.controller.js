@@ -132,6 +132,7 @@ async function checkPrivileges(userId, postId, res) {
           error: true, message: `${postId} is an invalid post id!`,
         },
     );
+    return false;
   }
 }
 

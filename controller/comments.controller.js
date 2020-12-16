@@ -137,6 +137,7 @@ async function checkPrivileges(userId, commentId, res) {
           error: true, message: `${commentId} is an invalid comment id!`,
         },
     );
+    return false;
   }
 }
 
