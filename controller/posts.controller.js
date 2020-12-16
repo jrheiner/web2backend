@@ -127,7 +127,7 @@ async function checkPrivileges(userId, postId, res) {
       return false;
     }
   } else {
-    res.status(404).send(
+    res.status(400).send(
         {
           error: true, message: `${postId} is an invalid post id!`,
         },
@@ -155,7 +155,8 @@ async function updateOne(req, res) {
     if (!data) {
       res.status(404).send(
           {
-            error: true, message: `Error updating post with id ${postId}!`,
+            error: true,
+            message: `Error updating post with id ${postId}! Post not found.`,
           },
       );
     } else {
@@ -207,7 +208,7 @@ async function addVote(req, res) {
   const userId = req.user.id;
   const postId = req.params.id;
   if (!mongoose.isValidObjectId(postId)) {
-    res.status(404).send(
+    res.status(400).send(
         {
           error: true, message: 'Invalid post id!',
         },
@@ -244,7 +245,7 @@ function deleteVote(req, res) {
   const userId = req.user.id;
   const postId = req.params.id;
   if (!mongoose.isValidObjectId(postId)) {
-    res.status(404).send(
+    res.status(400).send(
         {
           error: true, message: 'Invalid post id!',
         },

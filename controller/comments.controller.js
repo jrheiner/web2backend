@@ -132,7 +132,7 @@ async function checkPrivileges(userId, commentId, res) {
       return false;
     }
   } else {
-    res.status(404).send(
+    res.status(400).send(
         {
           error: true, message: `${commentId} is an invalid comment id!`,
         },

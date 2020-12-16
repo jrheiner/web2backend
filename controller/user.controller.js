@@ -271,7 +271,7 @@ async function checkSaved(req, res) {
 
 async function checkValidPost(postId, res) {
   if (!mongoose.isValidObjectId(postId)) {
-    res.status(404).send(
+    res.status(400).send(
         {error: true, message: `${postId} is not a valid post id!`},
     );
     return false;
