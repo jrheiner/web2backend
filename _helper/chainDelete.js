@@ -7,18 +7,41 @@ const Saved = require('../models/saved.model');
 const cloudinary = require('cloudinary').v2;
 const cloudConfig = require('../config/config.json').cloudinary;
 
-
 module.exports = {
   deleteUserChildren,
   deletePostChildren,
 };
 
+/**
+ * Handles deletion of related documents when a user or post is deleted
+ * @module chain-delete
+ * @requires cloudinary
+ */
+
+
+/**
+ * Cloud provider SDK configuration
+ */
 cloudinary.config({
   cloud_name: cloudConfig.cloud_name,
   api_key: cloudConfig.api_key,
   api_secret: cloudConfig.api_secret,
 });
 
+/**
+ * Deletes database documents (children) related to a user
+ *
+ * @description Children means all posts, comments,
+ * likes, and saved by the user. Additionally, deletes children of children,
+ * e.g. comments of a post created by the user.
+ * This is to avoid orphaned database documents (e.g. children without parent).
+ *
+ * @param {string} userId - UserId of user that was deleted,
+ * this is the initial parent
+ *
+ * @return {Promise<{comments: *,
+ * saves: *, posts: *, likes: *}>} - Returns database response about deletion
+ */
 async function deleteUserChildren(userId) {
   const postsByUser = await Post.findManyByUser(userId).select('_id');
   const postIds = postsByUser.map((e) => e._id);
@@ -51,6 +74,12 @@ async function deleteImagesByPost(postId) {
   }
 }
 
+/**
+ * Deletes all database documents (children) of a post
+ * @param {string} postId - Id of post that was deleted
+ * @return {Promise<{images: *,
+ * comments: *, saves: *, likes: *}>} - Returns database response about deletion
+ */
 async function deletePostChildren(postId) {
   await deleteImagesByPost(postId);
   return {

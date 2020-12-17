@@ -9,6 +9,8 @@ const jsdoc = require('gulp-jsdoc3');
 
 /**
  * Gulpfile defining gulp tasks and pipelines
+ * @module gulpfile
+ * @requires gulp
  */
 
 /**

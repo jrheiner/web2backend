@@ -9,6 +9,9 @@ const debug = require('debug')('backend:server');
 let dbConfig;
 let logConfig;
 
+// TODO Migrate backend to typescript (including linting)
+// TODO Check all console.log()
+
 try {
   dbConfig = require('./config/config.json').mongo;
   logConfig = require('./config/config.json').logging;
@@ -27,9 +30,17 @@ const commentRouter = require('./routes/comments.routes');
 const userRouter = require('./routes/user.routes');
 const projectStats = require('./_helper/projectStats');
 
+
+/**
+ * Creates express app
+ * @type {Express}
+ */
 const app = express();
 
-// TODO logger format tiny or combined
+
+/**
+ * Outputs all requests to console
+ */
 app.use(logger(logConfig.format, {
   stream: {
     write: (msg) => {
@@ -37,52 +48,75 @@ app.use(logger(logConfig.format, {
     },
   },
 }));
+
+
+/**
+ * Set secure HTTP headers
+ * @description contentSecurityPolicy is disabled so the
+ * Angular Application can load images from the cloud cdn
+ */
 app.use(helmet({
   contentSecurityPolicy: false,
 }));
+
+
+/**
+ * Enable compression middleware to improve performance
+ */
 app.use(compression());
+
+/**
+ * Set up express middleware for parsing requests
+ */
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
+/**
+ * Define API routes and assign routers
+ */
 app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
 app.use('/api/user', userRouter);
 app.get('/api/', projectStats);
 
-// Serve Angular app
+/**
+ * Serve Angular build files
+ * @description Also sends all requests to 'undefined'
+ * paths to index.html so the angular routing can take care of it.
+ * For example /post/:id would otherwise return 'CANNOT GET...'
+ * because its defined in the internal Angular routing
+ */
 app.get('*.*', express.static('public'));
 app.all('*', function(req, res) {
   res.status(200).sendFile('/', {root: 'public'});
 });
 
-
-// TODO Migrate backend to typescript (including linting)
-// TODO Check all console.log()
-/*
-  TODO Gulp file to build dev (install and build doc)
-  and prod environment (build frontend, bundle js, lint, tests)
-*/
-
-// TODO Organize frontend angular components in modules
-
-// TODO Mocha tests (idk api endpoints maybe)
-// TODO Backend documentation + doc builder
-
-// TODO implement general error handling
-app.use(function(err, req, res, next) {
+/**
+ * Handling 401 Unauthorized
+ * when user accesses protected routes without session token
+ */
+app.use(function(err, req, res) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).send({error: true, message: 'User not logged in!'});
   }
 });
 
+/**
+ * Set Mongoose options
+ */
 const mongooseOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
 };
-
+/**
+ * Build database uri from config
+ */
 const dbUri = `${dbConfig.protocol}://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}/${dbConfig.db}?${dbConfig.options}`;
+/**
+ * Connection to database
+ */
 mongoose.connect(dbUri, mongooseOptions)
     .then(() => {
       if (process.env.DEBUG) {
@@ -102,6 +136,9 @@ mongoose.connect(dbUri, mongooseOptions)
       process.exit(0);
     });
 
+/**
+ * Database connection error handler
+ */
 mongoose.connection.on('error', (err) => {
   if (process.env.DEBUG) {
     debug(
@@ -115,7 +152,7 @@ mongoose.connection.on('error', (err) => {
 });
 
 /**
- * JSDoc test
+ * Close database connection when applications exists
  */
 process.on('SIGINT', () => {
   mongoose.connection.close(() => {
@@ -133,9 +170,3 @@ module.exports = {
   app,
   mongoose,
 };
-
-/*
-app.listen(appConfig.port, () => {
-  console.log(`App listening at http://localhost:${appConfig.port}`);
-});
-*/

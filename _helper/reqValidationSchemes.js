@@ -1,9 +1,21 @@
 const Validator = require('jsonschema').Validator;
 const mongoose = require('mongoose');
 
-// https://json-schema.org/draft/2019-09/json-schema-validation.html
+/**
+ * Stores JsonSchemas for request validation
+ * @description Schemas based on https://json-schema.org/draft/2019-09/json-schema-validation.html
+ * @module schemas
+ * @requires mongoose
+ * @requires jsonschema
+ */
 
-// https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username/12019115
+
+/**
+ * Properties a username must fulfill to be deemed valid
+ * @description Pattern derived from
+ * https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username/12019115
+ * @const
+ */
 const usernameProperties = {
   type: 'string',
   minLength: 2,
@@ -11,7 +23,13 @@ const usernameProperties = {
   pattern: '^(?=[a-zA-Z0-9-_]{2,16}$)[^_-].*[^_-]$',
 };
 
-// https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
+
+/**
+ * Properties a password must fulfill to be deemed valid
+ * @description Pattern derived from
+ * https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
+ * @const
+ */
 const passwordProperties = {
   type: 'string',
   minLength: 5,
@@ -21,6 +39,22 @@ const passwordProperties = {
 
 };
 
+
+/**
+ * Custom schema validator to validate mongoose ids
+ * @description Calls https://mongoosejs.com/docs/api/mongoose.html#mongoose_Mongoose-isValidObjectId
+ * @param {string} input - String to validate
+ * @return {boolean} - If input is a valid mongoose id
+ */
+Validator.prototype.customFormats.mongooseId = function(input) {
+  return mongoose.isValidObjectId(input);
+};
+
+
+/**
+ * Schema for a register request body
+ * @const
+ */
 const RegisterReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   id: 'RegisterReqSchema',
@@ -35,6 +69,11 @@ const RegisterReqSchema = {
   ],
 };
 
+
+/**
+ * Schema for a login request body
+ * @const
+ */
 const LoginReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   type: 'object',
@@ -48,6 +87,11 @@ const LoginReqSchema = {
   ],
 };
 
+
+/**
+ * Schema for a user update request body
+ * @const
+ */
 const UpdateUserReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   type: 'object',
@@ -68,6 +112,11 @@ const UpdateUserReqSchema = {
   ],
 };
 
+
+/**
+ * Schema for a new post request body
+ * @const
+ */
 const PostReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   type: 'object',
@@ -99,11 +148,11 @@ const PostReqSchema = {
   ],
 };
 
-// https://mongoosejs.com/docs/api/mongoose.html#mongoose_Mongoose-isValidObjectId
-Validator.prototype.customFormats.mongooseId = function(input) {
-  return mongoose.isValidObjectId(input);
-};
 
+/**
+ * Schema for a new comment request body
+ * @const
+ */
 const CommentReqSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   type: 'object',

@@ -17,6 +17,18 @@ module.exports = {
   deleteVote,
 };
 
+
+/**
+ * Handle all post related operations on the database
+ * @module controller/posts
+ */
+
+
+/**
+ * Creates a new post by the logged in user in the database
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ */
 function create(req, res) {
   const reqValidity = v.validatePostReq(req.body);
   if (!reqValidity.valid) {
@@ -63,6 +75,12 @@ function create(req, res) {
   });
 }
 
+
+/**
+ * Gets all posts from the database
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ */
 function findAll(req, res) {
   Post.find({}).then((data) => {
     buildResponse.buildPostResponseMultiple(data).then((data) => {
@@ -74,6 +92,12 @@ function findAll(req, res) {
   });
 }
 
+
+/**
+ * Finds a specific post by id
+ * @param {*} req - Incoming request, params contain post id
+ * @param {*} res - Response
+ */
 function findOne(req, res) {
   const id = req.params.id;
   if (!mongoose.isValidObjectId(id)) {
@@ -106,6 +130,14 @@ function findOne(req, res) {
   });
 }
 
+
+/**
+ * Check if the user has privileges to edit or delete a post
+ * @param {string} userId - Id of user
+ * @param {string} postId - Id of post
+ * @param {*} res - Response
+ * @return {Promise<boolean>}
+ */
 async function checkPrivileges(userId, postId, res) {
   if (mongoose.isValidObjectId(postId)) {
     const postToEdit = await Post.findById(postId);
@@ -136,6 +168,13 @@ async function checkPrivileges(userId, postId, res) {
   }
 }
 
+
+/**
+ * Updates a post in the database
+ * @param {*} req - Incoming request, params contain post id
+ * @param {*} res - Response
+ * @return {Promise<void>}
+ */
 async function updateOne(req, res) {
   const reqValidity = v.validatePostReq(req.body);
   if (!reqValidity.valid) {
@@ -174,6 +213,16 @@ async function updateOne(req, res) {
   });
 }
 
+
+/**
+ * Deletes a post and all related child document
+ * @description For more information about child relations
+ * and deletion check the module chain-delete
+ *
+ * @param {*} req - Incoming request, params contain post id
+ * @param {*} res - Response
+ * @return {Promise<void>}
+ */
 async function deleteOne(req, res) {
   const userId = req.user.id;
   const postId = req.params.id;
@@ -204,6 +253,13 @@ async function deleteOne(req, res) {
   });
 }
 
+
+/**
+ * Add a like from the logged in user to a post
+ * @param {*} req - Incoming request, params contain post id
+ * @param {*} res - Response
+ * @return {Promise<void>}
+ */
 async function addVote(req, res) {
   const userId = req.user.id;
   const postId = req.params.id;
@@ -241,6 +297,12 @@ async function addVote(req, res) {
   });
 }
 
+
+/**
+ * Remove like from logged in user from a post
+ * @param {*} req - Incoming request, params contain post id
+ * @param {*} res - Response
+ */
 function deleteVote(req, res) {
   const userId = req.user.id;
   const postId = req.params.id;

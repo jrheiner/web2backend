@@ -11,6 +11,11 @@ const mongoose = require('mongoose');
 const Post = require('../models/post.model');
 const Saved = require('../models/saved.model');
 
+/**
+ * Handle all user related operations on the database
+ * @module controller/user
+ */
+
 module.exports = {
   register,
   login,
@@ -27,8 +32,8 @@ module.exports = {
 /**
  * Add new user to the database,
  * build and upload the avatar based on the username
- * @param {Request} req - Incoming request
- * @param {Response} res - Response
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
  * @return {Promise<void>} - Void
  */
 async function register(req, res) {
@@ -56,7 +61,6 @@ async function register(req, res) {
       User.updateOne({_id: data._id},
           {avatar: upload.secure_url}, (err, res) => {
             if (err !== null) {
-              console.log('Error updating avatar url');
               console.log(err);
             }
           });
@@ -68,6 +72,13 @@ async function register(req, res) {
   });
 }
 
+
+/**
+ * Validates login request and returns session/auth token
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ * @return {Promise<void>} - Void
+ */
 async function login(req, res) {
   const reqValidity = v.validateLoginReq(req.body);
   if (!reqValidity.valid) {
@@ -103,6 +114,12 @@ async function login(req, res) {
   }
 }
 
+
+/**
+ * Checks if a username already exists in the database
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ */
 function check(req, res) {
   if (req.params.username) {
     User.exists({username: req.params.username.toString().toLowerCase()})
@@ -112,14 +129,34 @@ function check(req, res) {
   }
 }
 
+/**
+ * Wrapper function to get information about logged in user
+ * @description Calls findOneById
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ */
 function findSelf(req, res) {
   findOneById(req.user.id, req, res);
 }
 
+
+/**
+ * Wrapper function to get information about any user by id
+ * @description Calls findOneById
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ */
 function findOne(req, res) {
   findOneById(req.params.id, req, res);
 }
 
+
+/**
+ * Handle all user information requests
+ * @param {string } id - User id
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ */
 function findOneById(id, req, res) {
   if (!mongoose.isValidObjectId(id)) {
     res.status(400).send(
@@ -145,6 +182,13 @@ function findOneById(id, req, res) {
   });
 }
 
+
+/**
+ * Updates the logged in user based on what is included in the request body
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ * @return {Promise<void>}
+ */
 async function updateSelf(req, res) {
   const reqValidity = v.validateUpdateUserReq(req.body);
   if (!reqValidity.valid) {
@@ -211,6 +255,15 @@ async function updateSelf(req, res) {
   });
 }
 
+
+/**
+ * Deletes user and all related child documents
+ * @description For more information about child relations
+ * and deletion check the module chain-delete
+ *
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ */
 function deleteSelf(req, res) {
   const id = req.user.id;
   User.findByIdAndDelete(id).then((data) => {
@@ -238,12 +291,25 @@ function deleteSelf(req, res) {
   });
 }
 
+
+/**
+ * Returns the save list of the logged in user
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ */
 function findSaved(req, res) {
   buildResponse.buildSavedResponse(req.user.id).then((data) => {
     res.status(200).send(data);
   });
 }
 
+
+/**
+ * Saves a post to the save list of the logged in user
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ * @return {Promise<void>}
+ */
 async function savePost(req, res) {
   const postId = req.params.id;
   const userId = req.user.id;
@@ -265,6 +331,13 @@ async function savePost(req, res) {
   }
 }
 
+
+/**
+ * Checks if the logged in user is viewing a saved post
+ * @param {*} req - Incoming request
+ * @param {*} res - Response
+ * @return {Promise<void>}
+ */
 async function checkSaved(req, res) {
   const postId = req.params.id;
   const userId = req.user.id;
@@ -276,6 +349,13 @@ async function checkSaved(req, res) {
   }
 }
 
+/**
+ * Checks if a post exists by its id
+ * @description Also checks if the post id is a valid mongoose id
+ * @param {string} postId - Id of post
+ * @param {*} res - Response
+ * @return {Promise<boolean>}
+ */
 async function checkValidPost(postId, res) {
   if (!mongoose.isValidObjectId(postId)) {
     res.status(400).send(

@@ -3,14 +3,37 @@ const app = require('../app').app;
 const appConfig = require('../config/config.json').app;
 const debug = require('debug')('backend:server');
 
+/**
+ * Configuration to run the application server
+ * @module run
+ * @requires http
+ * @requires debug
+ */
 
+
+/**
+ * Port the app is served on
+ * @type {number}
+ * @const
+ */
 const port = appConfig.port;
 app.set('port', port);
+
+
+/**
+ * HTTP server that serves the app
+ * @const
+ */
 const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+
+/**
+ * Error handler for the http server
+ * @param {*} error -  Error
+ */
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -20,7 +43,6 @@ function onError(error) {
     'Pipe ' + port :
     'Port ' + port;
 
-  // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
@@ -34,6 +56,10 @@ function onError(error) {
   process.exit(1);
 }
 
+
+/**
+ * Outputs server address and port to console when server started successfully
+ */
 function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string' ?

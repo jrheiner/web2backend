@@ -42,7 +42,6 @@ const upload = multer({storage: storage});
  * @memberof module:routers/user~userRouter
  * @inner
  * @param {string} path - api/user/register
- * @param {callback} middleware - Express middleware.
  */
 router.post('/register', userController.register);
 
@@ -54,7 +53,6 @@ router.post('/register', userController.register);
  * @memberof module:routers/user~userRouter
  * @inner
  * @param {string} path - api/user/register
- * @param {callback} middleware - Express middleware.
  */
 router.post('/login', userController.login);
 
@@ -136,6 +134,8 @@ router.get('/:id', userController.findOne);
  * @memberof module:routers/user~userRouter
  * @inner
  * @param {string} path - api/user/
+ * @param {callback} middleware - Authentication if user is logged in
+ * @param {callback} middleware - Multer handles files from form data
  */
 router.put('/', auth, upload.fields([
   {name: 'customAvatar', maxCount: 1},

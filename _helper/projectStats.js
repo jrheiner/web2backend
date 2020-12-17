@@ -6,6 +6,21 @@ const Image = require('../models/image.model');
 const Comment = require('../models/comment.model');
 const async = require('async');
 
+/**
+ * Get statistics about project database
+ * @module project-stats
+ * @requires mongoose
+ * @requires async
+ */
+
+/**
+ * Middleware function to handle requests for the project statistics
+ * @description Collects information about
+ * single database collections but also the entire database
+ *
+ * @param {Request} req - Request
+ * @param {Response} res - Response
+ */
 module.exports = function projectStats(req, res) {
   async.parallel({
     db: function(callback) {

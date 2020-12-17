@@ -13,6 +13,18 @@ module.exports = {
   deleteOne,
 };
 
+/**
+ * Handle all comment related operations on the database
+ * @module controller/comments
+ */
+
+
+/**
+ * Creates a new comment by the logged in user in the database
+ * @param {*} req - Incoming request, params contain post id
+ * @param {*} res - Response
+ * @return {Promise<void>}
+ */
 async function create(req, res) {
   const reqValidity = v.validateCommentReq(req.body);
   if (!reqValidity.valid) {
@@ -50,6 +62,12 @@ async function create(req, res) {
   });
 }
 
+
+/**
+ * Gets all comments for a post
+ * @param {*} req - Incoming request, params contain post id
+ * @param {*} res - Response
+ */
 function findAll(req, res) {
   const id = req.params.id;
   if (mongoose.isValidObjectId(id)) {
@@ -76,6 +94,12 @@ function findAll(req, res) {
   }
 }
 
+
+/**
+ * Gets a comment by id
+ * @param {*} req - Incoming request, params contain comment id
+ * @param {*} res - Response
+ */
 function findOne(req, res) {
   const id = req.params.id;
   if (!mongoose.isValidObjectId(id)) {
@@ -111,6 +135,14 @@ function findOne(req, res) {
   });
 }
 
+
+/**
+ * Check if the user has privileges to edit or delete a comment
+ * @param {string} userId - Id of user
+ * @param {string} commentId - Id of comment
+ * @param {*} res - Response
+ * @return {Promise<boolean>}
+ */
 async function checkPrivileges(userId, commentId, res) {
   if (mongoose.isValidObjectId(commentId)) {
     const commentToEdit = await Comment.findById(commentId);
@@ -141,6 +173,13 @@ async function checkPrivileges(userId, commentId, res) {
   }
 }
 
+
+/**
+ * Updates a comment in the database
+ * @param {*} req - Incoming request, params contain comment id
+ * @param {*} res - Response
+ * @return {Promise<void>}
+ */
 async function updateOne(req, res) {
   const reqValidity = v.validateCommentReq(req.body);
   if (!reqValidity.valid) {
@@ -180,6 +219,13 @@ async function updateOne(req, res) {
   });
 }
 
+
+/**
+ * Deletes a comment in the database
+ * @param {*} req - Incoming request, params contain comment id
+ * @param {*} res - Response
+ * @return {Promise<void>}
+ */
 async function deleteOne(req, res) {
   const userId = req.user.id;
   const commentId = req.params.id;
