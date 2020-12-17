@@ -94,7 +94,7 @@ function runLinter(cb) {
  * @return {*}
  */
 function runTests() {
-  return src('app.test.js', {read: false})
+  return src('./testing/*.spec.js', {read: false})
       .pipe(mocha({reporter: 'spec'}));
 }
 
@@ -102,8 +102,6 @@ function runTests() {
  * Gulp task to build Documentation using jsdoc
  * @param {function} cb - Callback build is finished
  * @return {*}
- * @deprecated This project is using swagger ui
- * to build and serve API documentation
  */
 function buildDocs(cb) {
   return src([
