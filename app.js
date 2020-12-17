@@ -96,10 +96,11 @@ app.all('*', function(req, res) {
  * Handling 401 Unauthorized
  * when user accesses protected routes without session token
  */
-app.use(function(err, req, res) {
+app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).send({error: true, message: 'User not logged in!'});
   }
+  next();
 });
 
 /**
