@@ -31,9 +31,11 @@ function checkConfig(cb) {
       fs.copyFileSync(example, path);
       log(` ✓ Created new config file based on config.example.json`);
       log(`[!] Configure it to connect to the database!`);
+      cb(new Error('[!] Config file is not configured!'));
     } else {
       log(`[!] No config file found!`);
       log(`[!] A config file is required!`);
+      cb(new Error('A config file is required!'));
     }
   } else {
     log(` ✓ Found config file ${path}`);
