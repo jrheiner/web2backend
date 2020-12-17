@@ -45,9 +45,8 @@ cloudinary.config({
 async function deleteUserChildren(userId) {
   const postsByUser = await Post.findManyByUser(userId).select('_id');
   const postIds = postsByUser.map((e) => e._id);
-
   await Promise.all(postIds.map(async (postId) => {
-    await deleteImagesByPost(postId);
+    await deletePostChildren(postId);
   }),
   );
   await cloudinary.uploader.destroy(userId, function(result) {
