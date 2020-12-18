@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/run.js",
+    "start": "set DEBUG=backend:* && node ./bin/run.js",
     "test": "mocha ./testing/*.spec.js --timeout 5000",
     "lint": "eslint . --ext .js",
     "dev": "gulp dev",
