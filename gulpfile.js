@@ -155,4 +155,5 @@ exports.dev = series(
     checkConfig,
     runLinter,
     runTests,
+    buildDocs,
 );

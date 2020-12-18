@@ -21,8 +21,12 @@ file is in the correct directory, run eslint, and run mocha tests for the web se
 To start the development server (i.e. a server serving the defined express API) use `npm run start`,
 this will set the environment variable `DEBUG=backend:*` and run the `run.js` which starts a nodejs 
 HTTP server.
+
+As part of `gulp dev` the jsdoc is built. You can find the HTML files in the `./docs` directory.
+
 ## Production deployment (of the entire app)
-To 'deploy' the Angular Application (FrontEnd project), run `gulp` or `gulp prod`. 
+To 'deploy' the Angular Application (FrontEnd project), run `gulp` or `gulp prod`. Right click the `index.html` 
+and select `Run index.html` in Webstorm to view the documentation on a localhost server by Webstorm.
 This will go through the following tasks: 
 ```
     checkConfig         - Check if config can be found in the correct directory
