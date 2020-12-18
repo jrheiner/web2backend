@@ -59,7 +59,7 @@ functionality in the web control panel, but it is *free*.
 application are stored on [Cloudinary](https://cloudinary.com/), just like with MongoDB Atlas Cloudinary 
 offers an unlimited free tier allowing a total of 25k transformations, 25 GB of managed storage or, 
 25 GB of net viewing bandwidth every month. 
-The reason why these two cloud providers were chooses are simply because they fulfilled the technical
+The reason why these two cloud providers were choosen are simply because they fulfilled the technical
 requirements with a permanent free tier, with limitations that only have a small or no impact on the project.
 
 Adding **user accounts** brought some challenges concerning security and session management. For example, some
