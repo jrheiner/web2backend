@@ -8,25 +8,24 @@ are provided. However, it is also possible to run the server connection to a loc
 database.
 
 For a general description of the project please refer to the ReadMe.md included in the submission directory directly. 
-This file only covers parts specific to the BackEnd project 
-
-## Installation
-To install required packages go to the 'BackEnd' directory, open the 
-terminal/console/bash, and type in `npm install`.
+This file only covers parts specific to the BackEnd project
 
 ## Development environment
-To verify the development environment you can run `gulp dev`, which will check if the config
+**To verify the development environment you can run `gulp dev`**, which will check if the config
 file is in the correct directory, run eslint, and run mocha tests for the web services.
 
-To start the development server (i.e. a server serving the defined express API) use `npm run start`,
-this will set the environment variable `DEBUG=backend:*` and run the `run.js` which starts a nodejs 
-HTTP server.
+**To start the express server use `npm run start`**. 
+Now http://localhost:3000/index.api.html should show a simple HTML page.
 
-As part of `gulp dev` the jsdoc is built. You can find the HTML files in the `./docs` directory.
+
+As part of `gulp dev` the jsdoc Documentation is built. You can find the HTML files in the `./docs` directory.
+Right click the `index.html` and select `Run index.html` in Webstorm to view the documentation.
 
 ## Production deployment (of the entire app)
-To 'deploy' the Angular Application (FrontEnd project), run `gulp` or `gulp prod`. Right click the `index.html` 
-and select `Run index.html` in Webstorm to view the documentation on a localhost server by Webstorm.
+**Important**: This step can only be done after the dependencies for the FrontEnd project are installed.
+
+
+To 'deploy' the Angular Application (FrontEnd project), run `gulp` in the terminal.
 This will go through the following tasks: 
 ```
     checkConfig         - Check if config can be found in the correct directory
@@ -36,15 +35,13 @@ This will go through the following tasks:
     buildAngularCode    - Build FrontEnd project using 'ng build --prod'
     copyAngularCode     - Copy Angular build files into the express public directory
 ```
-Starting the express server, `node ./bin/run.js` or for verbose logging `npm run start`, will now serve the angular app.
+Starting the express server with `npm run start`, will now serve the angular app on the express server at http://localhost:3000/.
 
 ## Issues
-If `localhost:PORT` is not loading after running `gulp prod`, please check `localhost:PORT/index.api.html`,
-if this loads a simple HTML page it is likely that the task that builds or copies the angular failed. 
-To fix this make sure no special privileges are required, and the Angular CLI is installed globally by
-running `install -g @angular/cli`.
+If the tests when running the `gulp` command are failing because of a server timeout. Run `gulp build` to just build and copy the Angular files.
+This happened on the company laptop due to some kind of restriction, all tests on private devices had no problem.
 
-If the problem persists the manual step is to build the Angular project by using the 
+If gulp has missing permission to build the front end and copy files the manual step is to build the Angular project by using the 
 `ng build --prod=true --base-href "/"` command and copying everything located in `dist/FrontEnd/**` (FrontEnd project)
 into the express `public` (BackEnd project) directory.
 
@@ -59,7 +56,7 @@ functionality in the web control panel, but it is *free*.
 application are stored on [Cloudinary](https://cloudinary.com/), just like with MongoDB Atlas Cloudinary 
 offers an unlimited free tier allowing a total of 25k transformations, 25 GB of managed storage or, 
 25 GB of net viewing bandwidth every month. 
-The reason why these two cloud providers were choosen are simply because they fulfilled the technical
+The reason why these two cloud providers were chosen are simply because they fulfilled the technical
 requirements with a permanent free tier, with limitations that only have a small or no impact on the project.
 
 Adding **user accounts** brought some challenges concerning security and session management. For example, some

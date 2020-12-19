@@ -108,6 +108,7 @@ function runTests() {
  * @return {*}
  */
 function buildDocs(cb) {
+  console.log('Building jsdoc documentation...');
   return src([
     'README.md',
     './_helper/*.js',
@@ -146,11 +147,19 @@ const prod = series(
     copyAngularCode,
 );
 
+/**
+ * Gulp pipeline to build and copy the Angular project
+ */
+const build = series(
+    buildAngularCode,
+    copyAngularCode,
+);
+
 exports.doc = buildDocs;
 exports.test = runTests;
 exports.lint = runLinter;
+exports.build = build;
 exports.default = prod;
-exports.prod = prod;
 exports.dev = series(
     checkConfig,
     runLinter,
