@@ -50,7 +50,7 @@ function checkConfig(cb) {
  */
 function buildAngularCode(cb) {
   log(' # Building Angular app...');
-  return exec('cd ../FrontEnd && ng build --prod=true --base-href "/"',
+  return exec('cd ../web2frontend && ng build --prod=true --base-href "/"',
       function(err, stdout, stderr) {
         log(stdout);
         log(stderr);
@@ -65,7 +65,7 @@ function buildAngularCode(cb) {
  */
 function copyAngularCode() {
   log(' # Copying Angular production files...');
-  return src('../FrontEnd/dist/FrontEnd/**')
+  return src('../web2frontend/dist/FrontEnd/**')
       .pipe(dest('public'));
 }
 
@@ -108,7 +108,7 @@ function runTests() {
  * @return {*}
  */
 function buildDocs(cb) {
-  console.log('Building jsdoc documentation...');
+  log('Building jsdoc documentation...');
   return src([
     'README.md',
     './_helper/*.js',
