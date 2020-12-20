@@ -66,8 +66,7 @@ async function register(req, res) {
           });
     });
     res.status(200).send(buildResponse.buildRegisterResponse(data));
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send({error: true, message: 'Error creating new user!'});
   });
 }
@@ -174,8 +173,7 @@ function findOneById(id, req, res) {
         res.status(200).send(data);
       });
     }
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send(
         {error: true, message: `Error getting user with id ${id}!`},
     );
@@ -231,7 +229,6 @@ async function updateSelf(req, res) {
   if (Object.keys(req.files).length !== 0) {
     updatedUser.avatar = req.files['customAvatar'][0].path;
   }
-  console.log(updatedUser);
   User.findByIdAndUpdate(id, {
     $set: updatedUser,
   }, {new: true}).then((data) => {
@@ -247,8 +244,7 @@ async function updateSelf(req, res) {
         res.status(200).send(data);
       });
     }
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send(
         {error: true, message: `Error updating user with id ${id}!`},
     );
@@ -276,12 +272,10 @@ function deleteSelf(req, res) {
       );
     } else {
       chainDelete.deleteUserChildren(id).then((data) => {
-        console.log(data);
         res.sendStatus(204);
       });
     }
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send(
         {
           error: true,
@@ -324,8 +318,7 @@ async function savePost(req, res) {
     });
     saved.save(saved).then((data) => {
       res.status(200).send({id: data._id});
-    }).catch((err) => {
-      console.log(err);
+    }).catch(() => {
       res.status(500).send({error: true, message: 'Error saving post!'});
     });
   }

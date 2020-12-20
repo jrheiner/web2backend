@@ -9,9 +9,6 @@ const debug = require('debug')('backend:server');
 let dbConfig;
 let logConfig;
 
-// TODO Migrate backend to typescript (including linting)
-// TODO Check all console.log()
-
 try {
   dbConfig = require('./config/config.json').mongo;
   logConfig = require('./config/config.json').logging;

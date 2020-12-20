@@ -69,8 +69,7 @@ function create(req, res) {
         console.log(err);
       });
     }
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send({error: true, message: 'Error creating new post!'});
   });
 }
@@ -86,8 +85,7 @@ function findAll(req, res) {
     buildResponse.buildPostResponseMultiple(data).then((data) => {
       res.status(200).send(data);
     });
-  }).catch((err) => {
-    console.log(err);
+  }).catch( () => {
     res.status(500).send({error: true, message: 'Error getting all posts!'});
   });
 }
@@ -120,8 +118,7 @@ function findOne(req, res) {
         res.status(200).send(data);
       });
     }
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send(
         {
           error: true, message: `Error getting post with id ${id}!`,
@@ -204,7 +201,6 @@ async function updateOne(req, res) {
       });
     }
   }).catch((err) => {
-    console.log(err);
     res.status(500).send(
         {
           error: true, message: `Error updating post with id ${postId}!`,
@@ -238,13 +234,11 @@ async function deleteOne(req, res) {
           },
       );
     } else {
-      chainDelete.deletePostChildren(postId).then((data) => {
-        console.log(data);
+      chainDelete.deletePostChildren(postId).then(() => {
         res.sendStatus(204);
       });
     }
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send(
         {
           error: true, message: `Error deleting post with id ${postId}!`,
@@ -291,8 +285,7 @@ async function addVote(req, res) {
       time: Math.floor(new Date().getTime() / 1000),
     },
     );
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send({error: true, message: 'Error liking post!'});
   });
 }
@@ -315,11 +308,9 @@ function deleteVote(req, res) {
     return;
   }
 
-  Vote.deletePair(userId, postId).then((data) => {
-    console.log(data);
+  Vote.deletePair(userId, postId).then(() => {
     res.sendStatus(204);
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send(
         {
           error: true, message: `Error deleting like for post ${postId}!`,

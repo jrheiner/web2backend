@@ -56,8 +56,7 @@ async function create(req, res) {
   });
   comment.save(comment).then(() => {
     res.sendStatus(204);
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send({error: true, message: 'Error creating new comment!'});
   });
 }
@@ -75,8 +74,7 @@ function findAll(req, res) {
       buildResponse.buildCommentResponseMultiple(data).then((data) => {
         res.status(200).send(data);
       });
-    }).catch((err) => {
-      console.log(err);
+    }).catch(() => {
       res.status(500).send(
           {
             error: true,
@@ -124,8 +122,7 @@ function findOne(req, res) {
         res.status(200).send(data);
       });
     }
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send(
         {
           error: true,
@@ -208,8 +205,7 @@ async function updateOne(req, res) {
         res.status(200).send({description: data.description});
       });
     }
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send(
         {
           error: true,
@@ -244,8 +240,7 @@ async function deleteOne(req, res) {
     } else {
       res.sendStatus(204);
     }
-  }).catch((err) => {
-    console.log(err);
+  }).catch(() => {
     res.status(500).send(
         {
           error: true,
