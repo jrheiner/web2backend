@@ -99,7 +99,7 @@ function runLinter(cb) {
  */
 function runTests() {
   return src('./testing/*.spec.js', {read: false})
-      .pipe(mocha({reporter: 'spec'}));
+      .pipe(mocha({reporter: 'spec', timeout: 10000}));
 }
 
 /**
